@@ -7,14 +7,12 @@ import { Button } from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { authFormSchema } from "@/lib/utils";
 import { login, signup } from "@/lib/actions/auth.action";
@@ -27,6 +25,7 @@ const AuthForm = ({ type }: { type: string }) => {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
+			name: "",
 			email: "",
 			password: "",
 		},
@@ -62,6 +61,21 @@ const AuthForm = ({ type }: { type: string }) => {
 
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+					{type === "/sign-up" && (
+						<FormField
+							control={form.control}
+							name="name"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Name</FormLabel>
+									<FormControl>
+										<Input placeholder="name" {...field} />
+									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					)}
 					<FormField
 						control={form.control}
 						name="email"
