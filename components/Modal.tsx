@@ -30,6 +30,8 @@ import {
 } from "@/components/ui/select";
 import { addTransaction } from "@/lib/actions/transaction.action";
 import { getCategories, getTypes } from "@/lib/actions/helper.action";
+import { redirect } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 
 type Category = { id: bigint; name: string };
 type Type = { id: bigint; name: string };
@@ -49,7 +51,7 @@ const ModalButton = ({ children }: any) => {
 
 	// to-do: get data of Category, Type from backend [create a server action]. Map it on select front-end.
 	useEffect(() => {
-		const fetchTypeAndCategory = async () => {
+		const fetchDatas = async () => {
 			try {
 				const [typesData, categoriesData] = await Promise.all([
 					getTypes(),
@@ -66,13 +68,16 @@ const ModalButton = ({ children }: any) => {
 			}
 		};
 
-		fetchTypeAndCategory();
+		fetchDatas();
 	}, []);
 
 	async function onSubmit(data: z.infer<typeof formSchema>) {
 		try {
 			const result = await addTransaction(data);
 			console.log(result);
+
+			toast.success("Transaction data saved! :)")
+			redirect("/transaction");
 		} catch (error) {
 			console.error(error);
 		}
@@ -80,6 +85,9 @@ const ModalButton = ({ children }: any) => {
 
 	return (
 		<div>
+			<div>
+				<Toaster />
+			</div>
 			<Dialog>
 				<DialogTrigger asChild>
 					<Button>{children}</Button>
@@ -113,7 +121,7 @@ const ModalButton = ({ children }: any) => {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>Type</FormLabel>
-										<Select>
+										<Select onValueChange={field.onChange}>
 											<SelectTrigger className="w-full">
 												<SelectValue placeholder="Select Type" />
 											</SelectTrigger>
@@ -149,7 +157,7 @@ const ModalButton = ({ children }: any) => {
 								render={({ field }) => (
 									<FormItem className="pb-4">
 										<FormLabel>Category</FormLabel>
-										<Select>
+										<Select onValueChange={field.onChange}>
 											<SelectTrigger className="w-full">
 												<SelectValue placeholder="Select Category" />
 											</SelectTrigger>
