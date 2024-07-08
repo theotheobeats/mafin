@@ -1,10 +1,15 @@
+"use client"
+
+import Navbar from "@/components/Navbar";
+
 export default function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
 	return (
-		<main className="flex min-h-screen w-full justify-between font-inter">
+		<main className="flex h-screen w-full font-inter">
+			<Navbar />
 			{children}
 		</main>
 	);

@@ -12,3 +12,11 @@ export const authFormSchema = (type: string) =>
 		email: z.string().email(),
 		password: z.string().min(8),
 	});
+
+export const transactionFormSchema = () =>
+	z.object({
+		name: z.string().min(8),
+		amount: z.coerce.number(),
+		type: z.bigint(),
+		category: z.bigint(),
+	});

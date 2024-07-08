@@ -17,7 +17,7 @@ const Navbar = () => {
 	};
 
 	return (
-		<div className="absolute sm:md:lg:h-screen sm:md:lg:w-[200px] bg-black text-white flex flex-col justify-between">
+		<div className="hidden sm:md:lg:h-screen sm:md:lg:w-[200px] bg-black text-white sm:md:lg:flex sm:md:lg:flex-col justify-between">
 			<div>
 				<div className="font-bold p-8">MAFIN</div>
 				<div className="flex-col p-8">
