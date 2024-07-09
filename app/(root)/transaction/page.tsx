@@ -7,16 +7,9 @@ import { useEffect, useState } from "react";
 import { columns } from "./column";
 import { DataTable } from "@/components/DataTable";
 
-type Transaction = {
-	id: bigint;
-	name: string;
-	amount: number;
-	category_id: bigint;
-	type_id: bigint;
-};
 
 const Page = () => {
-	const [transactions, setTransactions] = useState<Transaction[]>([]);
+	const [transactions, setTransactions] = useState<TransactionColumnProps[]>([]);
 
 	useEffect(() => {
 		const fetchDatas = async () => {
@@ -25,7 +18,7 @@ const Page = () => {
 				console.log("Transaction data fetched:", transactionData);
 
 				if (Array.isArray(transactionData)) {
-					setTransactions(transactionData as Transaction[]);
+					setTransactions(transactionData as TransactionColumnProps[]);
 				} else {
 					console.error("Fetched data is not an array:", transactionData);
 				}

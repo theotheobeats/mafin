@@ -40,12 +40,29 @@ export async function getTransactionData() {
 		const user = await getUser();
 		const response = await supabase
 			.from("transactions")
-			.select("*")
+			.select(
+				`
+				*,
+				types ( name ), 
+				categories ( name )
+			  `
+			)
 			.eq("userId", user.id);
 
-		// TODO: join types and categories
+		if (response.error) {
+			throw response.error;
+		}
 
-		return parseStringify(response.data);
+		// Transform the data into a flattened structure
+		const flattenedData = response.data.map((transaction: any) => ({
+			id: transaction.id,
+			name: transaction.name,
+			amount: transaction.amount,
+			type: transaction.types.name,
+			category: transaction.categories.name,
+		}));
+
+		return parseStringify(flattenedData);
 	} catch (error) {
 		return error;
 	}
