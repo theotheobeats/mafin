@@ -30,8 +30,8 @@ import {
 } from "@/components/ui/select";
 import { addTransaction } from "@/lib/actions/transaction.action";
 import { getCategories, getTypes } from "@/lib/actions/helper.action";
-import { redirect } from "next/navigation";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 type Category = { id: bigint; name: string };
 type Type = { id: bigint; name: string };
@@ -41,6 +41,7 @@ const ModalButton = ({ children }: any) => {
 	const [open, setOpen] = useState(false);
 	const [categories, setCategories] = useState<Category[]>([]);
 	const formSchema = transactionFormSchema();
+	const router = useRouter();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -49,7 +50,7 @@ const ModalButton = ({ children }: any) => {
 		},
 	});
 
-	// to-do: get data of Category, Type from backend [create a server action]. Map it on select front-end.
+	// to-do: get data of Category, Type from backend [create a server action]. Map it on select front-end. [done]
 	useEffect(() => {
 		const fetchDatas = async () => {
 			try {
@@ -66,20 +67,22 @@ const ModalButton = ({ children }: any) => {
 		};
 
 		fetchDatas();
-	}, []);
+	}, [open]);
 
+	// fix reload flow below, change it to SSR
 	async function onSubmit(data: z.infer<typeof formSchema>) {
 		try {
-			setOpen(false);
-
+			
 			toast.promise(addTransaction(data), {
 				loading: "Saving transaction..",
 				success: "Transcation saved!",
 				error: "Error occured",
 			});
+
+			setOpen(false);
 		} catch (error) {
 			console.error(error);
-		}
+		} 
 	}
 
 	return (

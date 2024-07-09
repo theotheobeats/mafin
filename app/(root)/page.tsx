@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 
 const Page = () => {
 	const [userData, setUserData] = useState<any>(null);
-	const router = useRouter();
 
 	useEffect(() => {
 		const fetchUserData = async () => {
