@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
+import { getTransactionData } from "./transaction.action";
 
 export async function getTypes() {
 	const supabase = createClient();
@@ -23,3 +24,4 @@ export async function getCategories() {
 
 	return data;
 }
+

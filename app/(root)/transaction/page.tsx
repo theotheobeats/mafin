@@ -2,31 +2,31 @@
 
 import Modal from "@/components/Modal";
 import { getTransactionData } from "@/lib/actions/transaction.action";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { columns } from "./column";
 import { DataTable } from "@/components/DataTable";
 
-
 const Page = () => {
-	const [transactions, setTransactions] = useState<TransactionColumnProps[]>([]);
+	const [transactions, setTransactions] = useState<TransactionColumnProps[]>(
+		[]
+	);
+
+	const fetchDatas = async () => {
+		try {
+			const transactionData = await getTransactionData();
+			console.log("Transaction data fetched:", transactionData);
+
+			if (Array.isArray(transactionData)) {
+				setTransactions(transactionData as TransactionColumnProps[]);
+			} else {
+				console.error("Fetched data is not an array:", transactionData);
+			}
+		} catch (error) {
+			console.log("Error fetching transaction data:", error);
+		}
+	};
 
 	useEffect(() => {
-		const fetchDatas = async () => {
-			try {
-				const transactionData = await getTransactionData();
-				console.log("Transaction data fetched:", transactionData);
-
-				if (Array.isArray(transactionData)) {
-					setTransactions(transactionData as TransactionColumnProps[]);
-				} else {
-					console.error("Fetched data is not an array:", transactionData);
-				}
-			} catch (error) {
-				console.log("Error fetching transaction data:", error);
-			}
-		};
-
 		fetchDatas();
 	}, []);
 

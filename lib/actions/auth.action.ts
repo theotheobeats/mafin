@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect, useRouter } from "next/navigation";
 
 import { createClient } from "@/utils/supabase/server";
+import { parseStringify } from "../utils";
 
 export async function login(data: { email: string; password: string }) {
 	const supabase = createClient();
@@ -14,7 +15,7 @@ export async function login(data: { email: string; password: string }) {
 	const response = await supabase.auth.signInWithPassword(data);
 
 	if (response.error) {
-		return response.error;
+		return parseStringify(response.error);
 	}
 
 	redirect("/");

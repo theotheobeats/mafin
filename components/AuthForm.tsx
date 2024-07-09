@@ -17,10 +17,13 @@ import Link from "next/link";
 import { authFormSchema } from "@/lib/utils";
 import { login, signup } from "@/lib/actions/auth.action";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const AuthForm = ({ type }: { type: string }) => {
 	const formSchema = authFormSchema(type);
 	const [isLoading, setIsLoading] = useState(false);
+	const router = useRouter();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -36,9 +39,12 @@ const AuthForm = ({ type }: { type: string }) => {
 		try {
 			if (type === "/sign-in") {
 				const result = await login(data);
-				console.log(result);
+				if (result) {
+					toast.error("Invalid ID/Password");
+				}
 			}
 
+			// TODO: Data unique handling
 			if (type === "/sign-up") {
 				const result = await signup(data);
 				console.log(result);
@@ -53,7 +59,9 @@ const AuthForm = ({ type }: { type: string }) => {
 	return (
 		<>
 			<div className="text-[5rem] text-center font-bold mb-8">
-				<h1>MAFIN.</h1>
+				<h1>
+					MA<span className="text-green-400">FIN</span>.
+				</h1>
 				<p className="text-xs text-slate-200 font-sans">
 					Your finance journaling made easy.
 				</p>

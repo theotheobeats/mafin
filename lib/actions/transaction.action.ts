@@ -17,6 +17,10 @@ export async function addTransaction(data: {
 
 	try {
 		const user = await getUser();
+
+		if (!user) {
+			throw new Error();
+		}
 		const response = await supabase.from("transactions").insert([
 			{
 				name: data.name,

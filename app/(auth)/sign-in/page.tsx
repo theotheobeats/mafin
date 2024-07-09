@@ -12,7 +12,7 @@ const SignIn = () => {
 		const checkLoginStatus = async () => {
 			const userLoggedIn = await isLoggedIn();
 			if (userLoggedIn) {
-				setLoading(false)
+				setLoading(false);
 				router.push("/");
 			} else {
 				setLoading(false);
@@ -27,7 +27,7 @@ const SignIn = () => {
 	}
 
 	return (
-		<section className="mx-auto my-auto w-[25rem]">
+		<section className="mx-auto my-auto w-[30rem] p-16 shadow-xl rounded-2xl">
 			<AuthForm type="/sign-in" />
 		</section>
 	);

@@ -41,7 +41,6 @@ const ModalButton = ({ children }: any) => {
 	const [open, setOpen] = useState(false);
 	const [categories, setCategories] = useState<Category[]>([]);
 	const formSchema = transactionFormSchema();
-	const router = useRouter();
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -72,7 +71,6 @@ const ModalButton = ({ children }: any) => {
 	// fix reload flow below, change it to SSR
 	async function onSubmit(data: z.infer<typeof formSchema>) {
 		try {
-			
 			toast.promise(addTransaction(data), {
 				loading: "Saving transaction..",
 				success: "Transcation saved!",
@@ -82,7 +80,7 @@ const ModalButton = ({ children }: any) => {
 			setOpen(false);
 		} catch (error) {
 			console.error(error);
-		} 
+		}
 	}
 
 	return (
@@ -108,7 +106,7 @@ const ModalButton = ({ children }: any) => {
 									<FormItem>
 										<FormLabel>Name</FormLabel>
 										<FormControl>
-											<Input placeholder="transaction name" {...field} />
+											<Input placeholder="Transaction Name" {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
