@@ -11,7 +11,7 @@ const Page = () => {
 		[]
 	);
 
-	const fetchDatas = async () => {
+	const fetchTransactionData = async () => {
 		try {
 			const transactionData = await getTransactionData();
 			console.log("Transaction data fetched:", transactionData);
@@ -27,7 +27,7 @@ const Page = () => {
 	};
 
 	useEffect(() => {
-		fetchDatas();
+		fetchTransactionData();
 	}, []);
 
 	return (
@@ -38,10 +38,10 @@ const Page = () => {
 				</div>
 				<div>
 					<div className="hidden sm:md:lg:block">
-						<Modal>Add Transaction</Modal>
+						<Modal fetchTransactionData={fetchTransactionData}>Add Transaction</Modal>
 					</div>
 					<div className="sm:md:lg:hidden">
-						<Modal>+</Modal>
+						<Modal fetchTransactionData={fetchTransactionData}>+</Modal>
 					</div>
 				</div>
 			</div>

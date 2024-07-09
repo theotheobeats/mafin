@@ -36,7 +36,7 @@ import { useRouter } from "next/navigation";
 type Category = { id: bigint; name: string };
 type Type = { id: bigint; name: string };
 
-const ModalButton = ({ children }: any) => {
+const ModalButton = ({ children, fetchTransactionData }: any) => {
 	const [types, setTypes] = useState<Type[]>([]);
 	const [open, setOpen] = useState(false);
 	const [categories, setCategories] = useState<Category[]>([]);
@@ -49,7 +49,6 @@ const ModalButton = ({ children }: any) => {
 		},
 	});
 
-	// to-do: get data of Category, Type from backend [create a server action]. Map it on select front-end. [done]
 	useEffect(() => {
 		const fetchDatas = async () => {
 			try {
@@ -71,13 +70,15 @@ const ModalButton = ({ children }: any) => {
 	// fix reload flow below, change it to SSR
 	async function onSubmit(data: z.infer<typeof formSchema>) {
 		try {
-			toast.promise(addTransaction(data), {
+			await toast.promise(addTransaction(data), {
 				loading: "Saving transaction..",
 				success: "Transcation saved!",
 				error: "Error occured",
 			});
 
+			fetchTransactionData();
 			setOpen(false);
+			form.reset();
 		} catch (error) {
 			console.error(error);
 		}
