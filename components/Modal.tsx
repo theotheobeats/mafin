@@ -38,6 +38,7 @@ type Type = { id: bigint; name: string };
 
 const ModalButton = ({ children }: any) => {
 	const [types, setTypes] = useState<Type[]>([]);
+	const [open, setOpen] = useState(false);
 	const [categories, setCategories] = useState<Category[]>([]);
 	const formSchema = transactionFormSchema();
 
@@ -45,7 +46,6 @@ const ModalButton = ({ children }: any) => {
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: "",
-			amount: 0,
 		},
 	});
 
@@ -60,9 +60,6 @@ const ModalButton = ({ children }: any) => {
 
 				setTypes(typesData as Type[]);
 				setCategories(categoriesData as Category[]);
-
-				// console.log(types);
-				// console.log(categories);
 			} catch (error) {
 				console.log(error);
 			}
@@ -73,11 +70,13 @@ const ModalButton = ({ children }: any) => {
 
 	async function onSubmit(data: z.infer<typeof formSchema>) {
 		try {
-			const result = await addTransaction(data);
-			console.log(result);
+			setOpen(false);
 
-			toast.success("Transaction data saved! :)")
-			redirect("/transaction");
+			toast.promise(addTransaction(data), {
+				loading: "Saving transaction..",
+				success: "Transcation saved!",
+				error: "Error occured",
+			});
 		} catch (error) {
 			console.error(error);
 		}
@@ -85,10 +84,7 @@ const ModalButton = ({ children }: any) => {
 
 	return (
 		<div>
-			<div>
-				<Toaster />
-			</div>
-			<Dialog>
+			<Dialog onOpenChange={setOpen} open={open}>
 				<DialogTrigger asChild>
 					<Button>{children}</Button>
 				</DialogTrigger>

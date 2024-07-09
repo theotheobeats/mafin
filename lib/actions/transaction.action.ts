@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { parseStringify } from "../utils";
+import { getUser } from "./auth.action";
 
 export async function addTransaction(data: {
 	name: string;
@@ -12,6 +13,7 @@ export async function addTransaction(data: {
 	category: string;
 }) {
 	const supabase = createClient();
+	const user = await getUser();
 
 	// type-casting here for convenience
 	// in practice, you should validate your inputs
@@ -23,6 +25,7 @@ export async function addTransaction(data: {
 				amount: data.amount,
 				type_id: data.type,
 				category_id: data.category,
+				userId: user.id,
 			},
 		]);
 
@@ -32,29 +35,3 @@ export async function addTransaction(data: {
 	}
 }
 
-// export const addTransaction = async (data: {
-// 	name: string;
-// 	amount: number;
-// 	type: string;
-// 	category: string;
-// }) => {
-// 	const supabase = createClient();
-
-// 	// type-casting here for convenience
-// 	// in practice, you should validate your inputs
-
-// 	try {
-// 		const response = await supabase.from("transactions").insert([
-// 			{
-// 				name: data.name,
-// 				amount: data.amount,
-// 				type_id: data.type,
-// 				category_id: data.category,
-// 			},
-// 		]);
-
-// 		return parseStringify(response);
-// 	} catch (error) {
-// 		return error;
-// 	}
-// };
