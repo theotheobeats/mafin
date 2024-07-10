@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { parseStringify } from "../utils";
 import { getUser } from "./auth.action";
 
+// DATABASE TX
 export async function addTransaction(data: {
 	name: string;
 	amount: number;
@@ -37,7 +38,46 @@ export async function addTransaction(data: {
 	}
 }
 
-// TODO: READ, UPDATE AND DELETE SERVER ACTION
+export async function updateTransaction(
+	txId: string,
+	data: {
+		name: string;
+		amount: number;
+		type: string;
+		category: string;
+	}
+) {
+	const supabase = createClient();
+
+	// type-casting here for convenience
+	// in practice, you should validate your inputs
+
+	try {
+		const user = await getUser();
+
+		if (!user) {
+			throw new Error();
+		}
+		const response = await supabase
+			.from("transactions")
+			.update([
+				{
+					name: data.name,
+					amount: data.amount,
+					type_id: data.type,
+					category_id: data.category,
+					userId: user.id,
+				},
+			])
+			.eq("id", txId);
+
+		return parseStringify(response);
+	} catch (error) {
+		return error;
+	}
+}
+
+// FETCH
 export async function getTransactionData() {
 	const supabase = createClient();
 	try {
@@ -67,6 +107,23 @@ export async function getTransactionData() {
 		}));
 
 		return parseStringify(flattenedData);
+	} catch (error) {
+		return error;
+	}
+}
+
+export async function getSingleTransactionData(id: string) {
+	const supabase = createClient();
+
+	try {
+		const response = await supabase
+			.from("transactions")
+			.select("*")
+			.eq("id", id)
+			.single();
+
+		console.log(parseStringify(response.data));
+		return parseStringify(response.data);
 	} catch (error) {
 		return error;
 	}

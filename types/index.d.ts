@@ -9,7 +9,7 @@ declare type Type = {
 };
 
 declare type TransactionColumnProps = {
-	id: bigint;
+	id: string;
 	name: string;
 	amount: number;
 	type: string;
@@ -18,7 +18,7 @@ declare type TransactionColumnProps = {
 
 declare type Transaction = {
 	id: bigint;
-	name: bigint;
+	name: string;
 	amount: number;
 	type_id: bigint;
 	category_id: bigint;
