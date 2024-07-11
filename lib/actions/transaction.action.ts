@@ -10,11 +10,9 @@ export async function addTransaction(data: {
 	amount: number;
 	type_id: string;
 	category_id: string;
+	date: Date;
 }) {
 	const supabase = createClient();
-
-	// type-casting here for convenience
-	// in practice, you should validate your inputs
 
 	try {
 		const user = await getUser();
@@ -28,6 +26,7 @@ export async function addTransaction(data: {
 				amount: data.amount,
 				type_id: data.type_id,
 				category_id: data.category_id,
+				date: data.date,
 				userId: user.id,
 			},
 		]);
@@ -44,13 +43,11 @@ export async function updateTransaction(
 		amount: number;
 		type_id: string;
 		category_id: string;
+		date: Date;
 	},
 	txId?: bigint
 ) {
 	const supabase = createClient();
-
-	// type-casting here for convenience
-	// in practice, you should validate your inputs
 
 	try {
 		const user = await getUser();
@@ -65,10 +62,23 @@ export async function updateTransaction(
 				amount: data.amount,
 				type_id: data.type_id,
 				category_id: data.category_id,
+				date: data.date,
 				userId: user.id,
 			})
 			.eq("id", txId)
 			.single();
+
+		return parseStringify(response);
+	} catch (error) {
+		return error;
+	}
+}
+
+export async function deleteTransaction(id: any) {
+	const supabase = createClient();
+
+	try {
+		const response = await supabase.from("transactions").delete().eq("id", id);
 
 		return parseStringify(response);
 	} catch (error) {
@@ -103,6 +113,7 @@ export async function getTransactionData() {
 			amount: transaction.amount,
 			type_id: transaction.type_id,
 			category_id: transaction.category_id,
+			date: transaction.date,
 			type: transaction.types.name,
 			category: transaction.categories.name,
 		}));

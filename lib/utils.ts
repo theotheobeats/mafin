@@ -17,7 +17,7 @@ export const authFormSchema = (type: string) =>
 
 export const transactionFormSchema = () =>
 	z.object({
-		name: z.string().min(8),
+		name: z.string().min(2),
 		amount: z.coerce.number({ required_error: "Please enter amount" }),
 		type_id: z
 			.string({
@@ -29,4 +29,5 @@ export const transactionFormSchema = () =>
 				required_error: "Please select category.",
 			})
 			.nonempty(),
+		date: z.date(),
 	});

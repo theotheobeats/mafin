@@ -19,13 +19,15 @@ const Navbar = () => {
 	return (
 		<div className="hidden sm:md:lg:h-screen sm:md:lg:w-[200px] bg-black text-white sm:md:lg:flex sm:md:lg:flex-col justify-between">
 			<div>
-				<div className="font-bold p-8">MAFIN</div>
+				<div className="font-bold p-8">
+					<Link href="/">MAFIN</Link>
+				</div>
 				<div className="flex-col p-8">
 					<div className="hover:text-slate-500 hover:rounded-sm cursor-pointer transition-all py-2 pr-10 w-full">
 						<Link href="/transaction">Transaction</Link>
 					</div>
 					<div className="hover:text-slate-500 hover:rounded-sm cursor-pointer transition-all py-2 pr-10 w-full">
-						<Link href="/category">Category</Link>
+						<Link href="/type">Type</Link>
 					</div>
 				</div>
 			</div>

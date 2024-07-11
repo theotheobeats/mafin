@@ -10,7 +10,11 @@ import { Button } from "@/components/ui/button";
 import TransactionModal from "@/components/TransactionModal";
 import { useEffect, useState } from "react";
 import { Dialog } from "@/components/ui/dialog";
-import { getTransactionData } from "@/lib/actions/transaction.action";
+import {
+	deleteTransaction,
+	getTransactionData,
+} from "@/lib/actions/transaction.action";
+import toast from "react-hot-toast";
 
 export function DataTableRowActions(txData: any) {
 	const [open, setOpen] = useState(false);
@@ -38,6 +42,20 @@ export function DataTableRowActions(txData: any) {
 		fetchTransactionData();
 	}, []);
 
+	async function handleDelete(txId: any) {
+		try {
+			await toast.promise(deleteTransaction(txId), {
+				loading: "Delete transaction..",
+				success: "Transcation deleted!",
+				error: "Error occured",
+			});
+
+			location.reload();
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
 	return (
 		<>
 			<div className="text-left">
@@ -54,7 +72,9 @@ export function DataTableRowActions(txData: any) {
 								<button onClick={() => setOpen(true)}>Edit</button>
 							</DropdownMenuItem>
 							<DropdownMenuItem className="text-red-600 font-bold">
-								Delete
+								<button onClick={() => handleDelete(txData.txData.id)}>
+									Delete
+								</button>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>

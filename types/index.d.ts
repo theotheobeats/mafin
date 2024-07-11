@@ -14,6 +14,7 @@ declare type TransactionColumnProps = {
 	amount: number;
 	type: string;
 	category: string;
+	date: Date;
 };
 
 declare type Transaction = {

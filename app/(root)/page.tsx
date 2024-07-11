@@ -25,8 +25,7 @@ const Page = () => {
 
 	return (
 		<section className="w-full h-full p-8">
-			<div className="font-bold text-2xl">Hello, {userData?.name}</div>
-			<p className="text-slate-500">Journay your expenses daily to let AI analyze your finance habit.</p>
+			<Dashboard userData={userData} />
 		</section>
 	);
 };

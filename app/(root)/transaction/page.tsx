@@ -36,29 +36,31 @@ const Page = () => {
 	return (
 		<>
 			<section className="h-full w-full p-8">
-				<div className="text-2xl font-bold flex justify-between">
-					<div>
-						<h1>Transactions</h1>
-					</div>
-					<div>
-						<div className="hidden sm:md:lg:block">
-							<Button onClick={() => setOpen(true)}>Add Transaction</Button>
+				<div className="pb-2">
+					<div className="text-xl font-bold flex justify-between">
+						<div>
+							<h1>Transactions</h1>
 						</div>
-						<div className="sm:md:lg:hidden">
-							<Button onClick={() => setOpen(true)}>+</Button>
+						<div>
+							<div className="hidden sm:md:lg:block">
+								<Button onClick={() => setOpen(true)}>Add Transaction</Button>
+							</div>
+							<div className="sm:md:lg:hidden">
+								<Button onClick={() => setOpen(true)}>+</Button>
+							</div>
 						</div>
 					</div>
+					<p className="text-slate-400">Manage your recent transactions here.</p>
 				</div>
-				<div></div>
-				<p>Manage your recent transactions here.</p>
+				<hr className="py-2"/>
+				<div>
 
-				<div className="py-4">
-					<hr />
+					<div className="pb-4">
+						<h2 className="font-semibold">Your today&apos;s transaction.</h2>
+					</div>
+					<DataTable columns={columns} data={transactions} />
 				</div>
-				<div className="pb-4">
-					<h2 className="font-semibold">Your today&apos;s transaction.</h2>
-				</div>
-				<DataTable columns={columns} data={transactions} />
+
 				<TransactionModal
 					title="Add Transaction"
 					open={open}

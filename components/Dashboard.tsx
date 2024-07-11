@@ -2,14 +2,15 @@ import React from "react";
 
 const Dashboard = ({ userData }: userDataProps) => {
 	return (
-		<section className="ml-[225px]">
-			<div className="font-semibold mt-8 text-4xl">
-				Welcome back, {userData?.name}
+		<section>
+			<div>
+				<div className="text-2xl">
+					Hi, <span className="font-bold">{userData?.name}</span>.
+				</div>
+				<p>
+					Record your income and expense everyday to track your financial habit.
+				</p>
 			</div>
-			<p>
-				Journal your expenses everyday to let our AI to track about your
-				financial habits.
-			</p>
 		</section>
 	);
 };

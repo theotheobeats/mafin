@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { format } from "date-fns";
 import {
 	Dialog,
 	DialogContent,
@@ -10,13 +11,14 @@ import {
 import {
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
 import { Button } from "./ui/button";
-import { transactionFormSchema } from "@/lib/utils";
+import { cn, transactionFormSchema } from "@/lib/utils";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,6 +36,9 @@ import {
 } from "@/lib/actions/transaction.action";
 import { getCategories, getTypes } from "@/lib/actions/helper.action";
 import toast from "react-hot-toast";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { Calendar } from "./ui/calendar";
 
 const TransactionModal = ({
 	fetchTransactionData,
@@ -54,6 +59,7 @@ const TransactionModal = ({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			name: "",
+			date: new Date(),
 		},
 	});
 
@@ -73,6 +79,7 @@ const TransactionModal = ({
 						amount: selectedData.txData.amount,
 						type_id: selectedData.txData.type_id.toString(),
 						category_id: selectedData.txData.category_id.toString(),
+						date: selectedData.txData.date,
 					});
 					setSelectedTransaction(selectedData.txData as SingleTransaction);
 				}
@@ -228,7 +235,7 @@ const TransactionModal = ({
 										control={form.control}
 										name="category_id"
 										render={({ field }) => (
-											<FormItem className="pb-4">
+											<FormItem>
 												<FormLabel>Category</FormLabel>
 												<Select
 													onValueChange={field.onChange}
@@ -255,6 +262,53 @@ const TransactionModal = ({
 											</FormItem>
 										)}
 									/>
+									<FormField
+										control={form.control}
+										name="date"
+										render={({ field }) => (
+											<FormItem className="flex flex-col pb-6 pt-2">
+												<FormLabel>Date</FormLabel>
+												<FormControl>
+													<Popover>
+														<PopoverTrigger asChild>
+															<FormControl>
+																<Button
+																	variant={"outline"}
+																	className={cn(
+																		"w-full pl-3 text-left font-normal",
+																		!field.value && "text-muted-foreground"
+																	)}>
+																	{field.value ? (
+																		format(field.value, "PPP")
+																	) : (
+																		<span>Transaction Date</span>
+																	)}
+																	<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+																</Button>
+															</FormControl>
+														</PopoverTrigger>
+														<PopoverContent
+															className="w-auto p-0"
+															align="start">
+															<Calendar
+																mode="single"
+																selected={field.value}
+																onSelect={field.onChange}
+																disabled={(date) =>
+																	date > new Date() ||
+																	date < new Date("1900-01-01")
+																}
+																initialFocus
+															/>
+														</PopoverContent>
+													</Popover>
+												</FormControl>
+
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+
 									<hr />
 									<Button className="py-4 w-full" type="submit">
 										Save
