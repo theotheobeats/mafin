@@ -25,3 +25,14 @@ export async function getCategories() {
 	return data;
 }
 
+// export const fetchTransactionData = async () => {
+// 	try {
+// 		const transactionData = await getTransactionData();
+// 		console.log("Transaction data fetched:", transactionData);
+
+// 		return transactionData;
+// 	} catch (error) {
+// 		console.log("Error fetching transaction data:", error);
+// 	}
+// };
+

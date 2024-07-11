@@ -13,6 +13,7 @@ const Page = () => {
 		[]
 	);
 
+	// REFACTOR THIS LATER
 	const fetchTransactionData = async () => {
 		try {
 			const transactionData = await getTransactionData();
@@ -59,7 +60,7 @@ const Page = () => {
 				</div>
 				<DataTable columns={columns} data={transactions} />
 				<TransactionModal
-					title="Edit Data"
+					title="Add Transaction"
 					open={open}
 					setOpen={setOpen}
 					fetchTransactionData={fetchTransactionData}

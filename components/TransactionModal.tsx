@@ -30,17 +30,15 @@ import {
 } from "@/components/ui/select";
 import {
 	addTransaction,
-	getSingleTransactionData,
 	updateTransaction,
 } from "@/lib/actions/transaction.action";
 import { getCategories, getTypes } from "@/lib/actions/helper.action";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 
 const TransactionModal = ({
 	fetchTransactionData,
 	edit,
-	txId,
+	txData,
 	setOpen,
 	open,
 	title,
@@ -48,7 +46,8 @@ const TransactionModal = ({
 	const [types, setTypes] = useState<Type[]>([]);
 	const [categories, setCategories] = useState<Category[]>([]);
 	const formSchema = transactionFormSchema();
-	const [transaction, setTransaction] = useState<Transaction[]>([]);
+	const [selectedTransaction, setSelectedTransaction] =
+		useState<SingleTransaction>();
 	const [loading, setLoading] = useState(true);
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -68,17 +67,14 @@ const TransactionModal = ({
 				]);
 
 				if (edit) {
-					const transactionData = await getSingleTransactionData(txId);
-					setTransaction(transactionData);
-					console.log(transactionData)
+					const selectedData = txData;
 					form.reset({
-						name: transactionData.name,
-						type: transactionData.type_id.toString(),
-						amount: transactionData.amount,
-						category: transactionData.category_id.toString(),
+						name: selectedData.txData.name,
+						amount: selectedData.txData.amount,
+						type_id: selectedData.txData.type_id.toString(),
+						category_id: selectedData.txData.category_id.toString(),
 					});
-				} else {
-					form.reset({ name: "", type: "", category: "" });
+					setSelectedTransaction(selectedData.txData as SingleTransaction);
 				}
 
 				setTypes(typesData as Type[]);
@@ -92,17 +88,19 @@ const TransactionModal = ({
 		if (open) {
 			fetchDatas();
 		}
-	}, [open, txId, edit, form]);
+	}, [open, txData, edit, form]);
 
 	// fix reload flow below, change it to SSR
 	async function onSubmit(data: z.infer<typeof formSchema>) {
 		try {
 			if (edit) {
-				await toast.promise(updateTransaction(txId, data), {
+				await toast.promise(updateTransaction(data, selectedTransaction?.id), {
 					loading: "Updating transaction..",
 					success: "Transcation updated!",
 					error: "Error occured",
 				});
+
+				location.reload();
 			} else {
 				await toast.promise(addTransaction(data), {
 					loading: "Saving transaction..",
@@ -110,6 +108,10 @@ const TransactionModal = ({
 					error: "Error occured",
 				});
 			}
+
+			// if (edit) {
+			// 	location.reload();
+			// }
 
 			fetchTransactionData();
 			setOpen(false);
@@ -158,7 +160,11 @@ const TransactionModal = ({
 													<Input
 														placeholder="Transaction Name"
 														{...field}
-														value={edit ? transaction?.name || "" : field.value}
+														// value={
+														// 	edit
+														// 		? selectedTransaction?.name
+														// 		: field.value
+														// }
 													/>
 												</FormControl>
 												<FormMessage />
@@ -167,14 +173,16 @@ const TransactionModal = ({
 									/>
 									<FormField
 										control={form.control}
-										name="type"
+										name="type_id"
 										render={({ field }) => (
 											<FormItem>
 												<FormLabel>Type</FormLabel>
 												<Select
 													onValueChange={field.onChange}
 													defaultValue={
-														edit ? transaction?.type_id?.toString() || "" : ""
+														edit
+															? selectedTransaction?.type_id.toString() || ""
+															: ""
 													}>
 													<SelectTrigger className="w-full">
 														<SelectValue placeholder="Select Type" />
@@ -205,9 +213,11 @@ const TransactionModal = ({
 														type="number"
 														placeholder="Amount"
 														{...field}
-														value={
-															edit ? transaction?.amount || "" : field.value
-														}
+														// value={
+														// 	edit
+														// 		? selectedTransaction?.amount || ""
+														// 		: field.value
+														// }
 													/>
 												</FormControl>
 												<FormMessage />
@@ -216,7 +226,7 @@ const TransactionModal = ({
 									/>
 									<FormField
 										control={form.control}
-										name="category"
+										name="category_id"
 										render={({ field }) => (
 											<FormItem className="pb-4">
 												<FormLabel>Category</FormLabel>
@@ -224,7 +234,8 @@ const TransactionModal = ({
 													onValueChange={field.onChange}
 													defaultValue={
 														edit
-															? transaction?.category_id?.toString() || ""
+															? selectedTransaction?.category_id.toString() ||
+															  ""
 															: undefined
 													}>
 													<SelectTrigger className="w-full">

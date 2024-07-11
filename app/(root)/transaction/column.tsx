@@ -42,9 +42,8 @@ export const columns: ColumnDef<TransactionColumnProps>[] = [
 	{
 		id: "actions",
 		cell: ({ row }) => {
-			const transaction = row.original;
-
-			return <DataTableRowActions transaction={transaction} />;
+			const txData = row.original;
+			return <DataTableRowActions txData={txData} />;
 		},
 	},
 ];

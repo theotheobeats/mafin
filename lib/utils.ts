@@ -19,12 +19,12 @@ export const transactionFormSchema = () =>
 	z.object({
 		name: z.string().min(8),
 		amount: z.coerce.number({ required_error: "Please enter amount" }),
-		type: z
+		type_id: z
 			.string({
 				required_error: "Please select type.",
 			})
 			.nonempty(),
-		category: z
+		category_id: z
 			.string({
 				required_error: "Please select category.",
 			})

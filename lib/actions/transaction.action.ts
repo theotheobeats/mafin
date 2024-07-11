@@ -8,8 +8,8 @@ import { getUser } from "./auth.action";
 export async function addTransaction(data: {
 	name: string;
 	amount: number;
-	type: string;
-	category: string;
+	type_id: string;
+	category_id: string;
 }) {
 	const supabase = createClient();
 
@@ -26,8 +26,8 @@ export async function addTransaction(data: {
 			{
 				name: data.name,
 				amount: data.amount,
-				type_id: data.type,
-				category_id: data.category,
+				type_id: data.type_id,
+				category_id: data.category_id,
 				userId: user.id,
 			},
 		]);
@@ -39,13 +39,13 @@ export async function addTransaction(data: {
 }
 
 export async function updateTransaction(
-	txId: string,
 	data: {
 		name: string;
 		amount: number;
-		type: string;
-		category: string;
-	}
+		type_id: string;
+		category_id: string;
+	},
+	txId?: bigint
 ) {
 	const supabase = createClient();
 
@@ -60,16 +60,15 @@ export async function updateTransaction(
 		}
 		const response = await supabase
 			.from("transactions")
-			.update([
-				{
-					name: data.name,
-					amount: data.amount,
-					type_id: data.type,
-					category_id: data.category,
-					userId: user.id,
-				},
-			])
-			.eq("id", txId);
+			.update({
+				name: data.name,
+				amount: data.amount,
+				type_id: data.type_id,
+				category_id: data.category_id,
+				userId: user.id,
+			})
+			.eq("id", txId)
+			.single();
 
 		return parseStringify(response);
 	} catch (error) {
@@ -102,28 +101,13 @@ export async function getTransactionData() {
 			id: transaction.id,
 			name: transaction.name,
 			amount: transaction.amount,
+			type_id: transaction.type_id,
+			category_id: transaction.category_id,
 			type: transaction.types.name,
 			category: transaction.categories.name,
 		}));
 
 		return parseStringify(flattenedData);
-	} catch (error) {
-		return error;
-	}
-}
-
-export async function getSingleTransactionData(id: string) {
-	const supabase = createClient();
-
-	try {
-		const response = await supabase
-			.from("transactions")
-			.select("*")
-			.eq("id", id)
-			.single();
-
-		console.log(parseStringify(response.data));
-		return parseStringify(response.data);
 	} catch (error) {
 		return error;
 	}
