@@ -1,10 +1,21 @@
+import { signout } from "@/lib/actions/auth.action";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const Navbar = () => {
-
+	const router = useRouter();
+	const handleSignOut = async () => {
+		try {
+			await signout();
+			router.push("/sign-in");
+		} catch (error) {
+			console.error("Error signing out: ", error);
+		}
+	};
 	return (
 		<>
+			{/* REFACTOR THE CODE IF CAN: MOVE ALL THE MENU CONTENT INTO TYPES AND JUST MAP IT IN HERE */}
 			<div className="hidden sm:md:lg:h-screen sm:md:lg:w-[80px] bg-black text-white sm:md:lg:flex sm:md:lg:flex-col justify-between">
 				<div className="text-center mt-12">
 					<div className="flex flex-col items-center space-y-4">
@@ -51,21 +62,19 @@ const Navbar = () => {
 							<Link href="/transaction">
 								<div className="icon-wrapper p-2 rounded-sm">
 									<svg
-										width="20" // Adjust width and height as needed
-										height="20"
-										viewBox="0 0 24 24"
+										stroke="currentColor"
+										aria-hidden="true"
 										xmlns="http://www.w3.org/2000/svg"
-										fill="currentColor"
-										stroke="currentColor">
-										<g id="SVGRepo_bgCarrier" strokeWidth="0" />
-										<g
-											id="SVGRepo_tracerCarrier"
-											strokeLinecap="round"
-											strokeLinejoin="round"
+										width="22"
+										height="22"
+										fill="none"
+										viewBox="0 0 24 24">
+										<path
+											stroke="currentColor"
+											stroke-linecap="round"
+											stroke-width="2"
+											d="M8 7V6a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1M3 18v-7a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
 										/>
-										<g id="SVGRepo_iconCarrier">
-											<path d="M17.0020048,13 C17.5542895,13 18.0020048,13.4477153 18.0020048,14 C18.0020048,14.5128358 17.6159646,14.9355072 17.1186259,14.9932723 L17.0020048,15 L5.41700475,15 L8.70911154,18.2928932 C9.0695955,18.6533772 9.09732503,19.2206082 8.79230014,19.6128994 L8.70911154,19.7071068 C8.34862757,20.0675907 7.78139652,20.0953203 7.38910531,19.7902954 L7.29489797,19.7071068 L2.29489797,14.7071068 C1.69232289,14.1045317 2.07433707,13.0928192 2.88837381,13.0059833 L3.00200475,13 L17.0020048,13 Z M16.6128994,4.20970461 L16.7071068,4.29289322 L21.7071068,9.29289322 C22.3096819,9.8954683 21.9276677,10.9071808 21.1136309,10.9940167 L21,11 L7,11 C6.44771525,11 6,10.5522847 6,10 C6,9.48716416 6.38604019,9.06449284 6.88337887,9.00672773 L7,9 L18.585,9 L15.2928932,5.70710678 C14.9324093,5.34662282 14.9046797,4.77939176 15.2097046,4.38710056 L15.2928932,4.29289322 C15.6533772,3.93240926 16.2206082,3.90467972 16.6128994,4.20970461 Z" />
-										</g>
 									</svg>
 								</div>
 							</Link>
@@ -185,21 +194,19 @@ const Navbar = () => {
 					<Link href="/transaction">
 						<div className="icon-wrapper p-2 rounded-sm">
 							<svg
-								width="20" // Adjust width and height as needed
-								height="20"
-								viewBox="0 0 24 24"
+								stroke="currentColor"
+								aria-hidden="true"
 								xmlns="http://www.w3.org/2000/svg"
-								fill="currentColor"
-								stroke="currentColor">
-								<g id="SVGRepo_bgCarrier" strokeWidth="0" />
-								<g
-									id="SVGRepo_tracerCarrier"
-									strokeLinecap="round"
-									strokeLinejoin="round"
+								width="22"
+								height="22"
+								fill="none"
+								viewBox="0 0 24 24">
+								<path
+									stroke="currentColor"
+									stroke-linecap="round"
+									stroke-width="2"
+									d="M8 7V6a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-1M3 18v-7a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm8-3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
 								/>
-								<g id="SVGRepo_iconCarrier">
-									<path d="M17.0020048,13 C17.5542895,13 18.0020048,13.4477153 18.0020048,14 C18.0020048,14.5128358 17.6159646,14.9355072 17.1186259,14.9932723 L17.0020048,15 L5.41700475,15 L8.70911154,18.2928932 C9.0695955,18.6533772 9.09732503,19.2206082 8.79230014,19.6128994 L8.70911154,19.7071068 C8.34862757,20.0675907 7.78139652,20.0953203 7.38910531,19.7902954 L7.29489797,19.7071068 L2.29489797,14.7071068 C1.69232289,14.1045317 2.07433707,13.0928192 2.88837381,13.0059833 L3.00200475,13 L17.0020048,13 Z M16.6128994,4.20970461 L16.7071068,4.29289322 L21.7071068,9.29289322 C22.3096819,9.8954683 21.9276677,10.9071808 21.1136309,10.9940167 L21,11 L7,11 C6.44771525,11 6,10.5522847 6,10 C6,9.48716416 6.38604019,9.06449284 6.88337887,9.00672773 L7,9 L18.585,9 L15.2928932,5.70710678 C14.9324093,5.34662282 14.9046797,4.77939176 15.2097046,4.38710056 L15.2928932,4.29289322 C15.6533772,3.93240926 16.2206082,3.90467972 16.6128994,4.20970461 Z" />
-								</g>
 							</svg>
 						</div>
 					</Link>
@@ -241,7 +248,7 @@ const Navbar = () => {
 					</Link>
 				</div>
 				<div className="hover:bg-slate-800 hover:rounded-sm cursor-pointer transition-all px-2 py-2">
-					<Link href="/sign-out">
+					<button onClick={handleSignOut}>
 						<div className="icon-wrapper p-2 rounded-sm">
 							<svg
 								width="20"
@@ -267,7 +274,7 @@ const Navbar = () => {
 								</g>
 							</svg>
 						</div>
-					</Link>
+					</button>
 				</div>
 			</div>
 		</>

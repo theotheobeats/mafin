@@ -25,14 +25,34 @@ export async function getCategories() {
 	return data;
 }
 
-// export const fetchTransactionData = async () => {
-// 	try {
-// 		const transactionData = await getTransactionData();
-// 		console.log("Transaction data fetched:", transactionData);
+export async function getTodayTotalExpenses(date: any) {
+	try {
+		const supabase = createClient();
+		const { data, error } = await supabase
+			.from("transactions")
+			.select(
+				`
+		  *,
+		  types ( name ), 
+		  categories ( name )
+		`
+			)
+			.eq("date", date);
 
-// 		return transactionData;
-// 	} catch (error) {
-// 		console.log("Error fetching transaction data:", error);
-// 	}
-// };
+		if (error) {
+			console.log(error);
+			return error;
+		}
 
+		const expenseTransactions = data.filter((tx) => tx.categories.name === "Expense");
+		const totalExpenses = expenseTransactions.reduce(
+			(total, tx) => total + tx.amount,
+			0
+		);
+
+		return totalExpenses;
+	} catch (error) {
+		console.error(error);
+		return error;
+	}
+}
