@@ -46,3 +46,9 @@ declare type FlattenedTransaction = {
 	type: string;
 	category: string;
 };
+
+declare type TodayTotalProps = {
+	income: number;
+	expense: number;
+	error: any;
+};

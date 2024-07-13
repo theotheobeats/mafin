@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { getTransactionData } from "./transaction.action";
+import { parseStringify } from "../utils";
 
 export async function getTypes() {
 	const supabase = createClient();
@@ -44,13 +45,26 @@ export async function getTodayTotalExpenses(date: any) {
 			return error;
 		}
 
-		const expenseTransactions = data.filter((tx) => tx.categories.name === "Expense");
+		const expenseTransactions = data.filter(
+			(tx) => tx.categories.name === "Expense"
+		);
+		const incomeTransactions = data.filter(
+			(tx) => tx.categories.name === "Income"
+		);
+
 		const totalExpenses = expenseTransactions.reduce(
 			(total, tx) => total + tx.amount,
 			0
 		);
+		const totalIncomes = incomeTransactions.reduce(
+			(total, tx) => total + tx.amount,
+			0
+		);
 
-		return totalExpenses;
+		return {
+			expense: parseFloat(totalExpenses),
+			income: parseFloat(totalIncomes),
+		};
 	} catch (error) {
 		console.error(error);
 		return error;

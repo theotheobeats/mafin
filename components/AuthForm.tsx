@@ -59,8 +59,8 @@ const AuthForm = ({ type }: { type: string }) => {
 	return (
 		<>
 			<div className="text-[5rem] text-center font-bold mb-8">
-				<h1>
-					MA<span className="text-green-400">FIN</span>.
+				<h1 className="bg-gradient-to-tr from-emerald-200 to-lime-300">
+					MAFIN.
 				</h1>
 				<p className="text-xs text-slate-200 font-sans">
 					Your finance journaling made easy.

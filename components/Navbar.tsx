@@ -120,7 +120,7 @@ const Navbar = () => {
 				</div>
 				<div className="mx-auto">
 					<div className="cursor-pointer transition-all mb-2 rounded-xl">
-						<Link href="/sign-out">
+						<button onClick={handleSignOut}>
 							<div className="flex flex-col items-center">
 								<div className="icon-wrapper p-2 rounded-sm hover:bg-slate-800 py-2 px-2">
 									<svg
@@ -148,7 +148,7 @@ const Navbar = () => {
 									</svg>
 								</div>
 							</div>
-						</Link>
+						</button>
 					</div>
 				</div>
 			</div>
