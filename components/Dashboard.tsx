@@ -123,71 +123,39 @@ const Dashboard = ({ userData }: any) => {
 				<div className="text-2xl">
 					Hi, <span className="font-bold">{userData?.name}</span>.
 				</div>
-				<p>
+				<p className="text-xs">
 					Record your income and expense everyday to track your financial habit.
 				</p>
 			</div>
 			<br />
 			<hr />
-			<div className="flex mt-8 gap-4">
-				<div className="bg-gradient-to-tr from-emerald-200 to-lime-300 text-black rounded-lg w-full shadow-sm p-4">
-					<h1 className="text-xs">Today Expenses</h1>
-					<h1 className="text-2xl font-bold">-{todayExpenses}</h1>
+			<div className="flex mt-8 gap-4 sm:md:lg:h-[200px] h-[100px]">
+				<div className="flex gap-4 justify-evenly w-full">
+					<div className="bg-gradient-to-tr from-emerald-200 to-lime-300 text-black rounded-lg w-full shadow-sm p-4">
+						<h1 className="text-xs">Today Income</h1>
+						<h1 className="sm:md:lg:text-2xl font-bold">- {todayExpenses}</h1>
+					</div>
+					<div className="bg-gradient-to-tr from-red-200 to-red-300 text-black rounded-lg w-full shadow-md p-4">
+						<h1 className="text-xs">Today Spending</h1>
+						<h1 className="sm:md:lg:text-2xl font-bold">+ {todayIncomes}</h1>
+					</div>
 				</div>
-				<div className="bg-gradient-to-tr from-emerald-200 to-lime-300 text-black rounded-lg w-full shadow-md p-4">
-					<h1 className="text-xs">Today Incomes</h1>
-					<h1 className="text-2xl font-bold">+ {todayIncomes}</h1>
-				</div>
-				<div className="w-full">
-					<h1>Recent Transactions</h1>
-					<h1 className="text-2xl font-bold"></h1>
+
+				<div className="hidden sm:md:lg:block bg-gradient-to-tr from-slate-50 to-slate-100 text-black rounded-lg w-full shadow-md p-4">
+					<h1 className="text-xs">Recent Transaction</h1>
+					<h1 className="sm:md:lg:text-2xl font-bold">+ {todayIncomes}</h1>
 				</div>
 			</div>
-			<div className="flex mt-8 gap-8">
-				<div className="w-full shadow-md rounded-xl p-4">
-					<ChartContainer config={chartConfig}>
-						<AreaChart
-							accessibilityLayer
-							data={chartData}
-							margin={{
-								left: 12,
-								right: 12,
-							}}>
-							<CartesianGrid vertical={true} />
-							<XAxis
-								dataKey="month"
-								tickLine={false}
-								axisLine={false}
-								tickMargin={8}
-								tickFormatter={(value) => value.slice(0, 3)}
-							/>
-							<ChartTooltip
-								cursor={false}
-								content={<ChartTooltipContent indicator="dot" />}
-							/>
-							<Area
-								dataKey="mobile"
-								type="natural"
-								fill="var(--color-mobile)"
-								fillOpacity={0.4}
-								stroke="var(--color-mobile)"
-								stackId="a"
-							/>
-							<Area
-								dataKey="desktop"
-								type="natural"
-								fill="var(--color-desktop)"
-								fillOpacity={0.4}
-								stroke="var(--color-desktop)"
-								stackId="a"
-							/>
-						</AreaChart>
-					</ChartContainer>
-				</div>
-				<div className="w-full shadow-md p-4 rounded-xl">
+			<div className="sm:md:lg:hidden mt-4 bg-gradient-to-tr from-slate-50 to-slate-100 text-black rounded-lg w-full shadow-md p-4">
+				<h1 className="text-xs">Recent Transaction</h1>
+				<h1 className="sm:md:lg:text-2xl font-bold">+ {todayIncomes}</h1>
+			</div>
+			<div className="sm:md:lg:flex mt-8 gap-8 overflow-hidden">
+				<div className="w-full shadow-md p-4 rounded-xl mb-4">
+					<h1 className="font-bold">Category Spending</h1>
 					<ChartContainer
 						config={pieChartConfig}
-						className="mx-auto aspect-square max-h-[400px]">
+						className="mx-auto aspect-square max-w-[400px]">
 						<PieChart>
 							<ChartTooltip
 								cursor={false}
@@ -227,6 +195,47 @@ const Dashboard = ({ userData }: any) => {
 								/>
 							</Pie>
 						</PieChart>
+					</ChartContainer>
+				</div>
+				<div className="w-full shadow-md rounded-xl p-4 mb-4">
+					<div className="font-bold">6-Month Spending Statistic</div>
+					<ChartContainer config={chartConfig} className="mx-auto my-auto">
+						<AreaChart
+							accessibilityLayer
+							data={chartData}
+							margin={{
+								left: 12,
+								right: 12,
+							}}>
+							<CartesianGrid vertical={true} />
+							<XAxis
+								dataKey="month"
+								tickLine={false}
+								axisLine={false}
+								tickMargin={8}
+								tickFormatter={(value) => value.slice(0, 3)}
+							/>
+							<ChartTooltip
+								cursor={false}
+								content={<ChartTooltipContent indicator="dot" />}
+							/>
+							<Area
+								dataKey="mobile"
+								type="natural"
+								fill="var(--color-mobile)"
+								fillOpacity={0.4}
+								stroke="var(--color-mobile)"
+								stackId="a"
+							/>
+							<Area
+								dataKey="desktop"
+								type="natural"
+								fill="var(--color-desktop)"
+								fillOpacity={0.4}
+								stroke="var(--color-desktop)"
+								stackId="a"
+							/>
+						</AreaChart>
 					</ChartContainer>
 				</div>
 			</div>

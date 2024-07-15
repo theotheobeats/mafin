@@ -16,7 +16,7 @@ const Navbar = () => {
 	return (
 		<>
 			{/* REFACTOR THE CODE IF CAN: MOVE ALL THE MENU CONTENT INTO TYPES AND JUST MAP IT IN HERE */}
-			<div className="hidden sm:md:lg:h-screen sm:md:lg:w-[80px] bg-black text-white sm:md:lg:flex sm:md:lg:flex-col justify-between">
+			<div className="fixed hidden sm:md:lg:h-screen sm:md:lg:w-[80px] bg-black text-white sm:md:lg:flex sm:md:lg:flex-col justify-between">
 				<div className="text-center mt-12">
 					<div className="flex flex-col items-center space-y-4">
 						<div className="hover:bg-slate-800 hover:rounded-sm cursor-pointer transition-all py-2 px-2">
@@ -152,7 +152,7 @@ const Navbar = () => {
 					</div>
 				</div>
 			</div>
-			<div className="bottom-0 absolute bg-black text-white w-full h-[50px] flex sm:md:lg:hidden justify-evenly overflow-hidden">
+			<div className="bottom-0 fixed bg-black text-white w-full h-[50px] flex sm:md:lg:hidden justify-evenly overflow-hidden z-10">
 				<div className="hover:bg-slate-800 hover:rounded-sm cursor-pointer transition-all py-2 px-2">
 					<Link href="/">
 						<div className="icon-wrapper p-2 rounded-sm">
