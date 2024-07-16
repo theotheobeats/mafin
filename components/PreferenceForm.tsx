@@ -16,11 +16,12 @@ import { Button } from "./ui/button";
 import { getTypes } from "@/lib/actions/helper.action";
 import { getUser } from "@/lib/actions/auth.action";
 import TypeModal from "./TypeModal";
+import { getProfile, updateProfile } from "@/lib/actions/profile.action";
+import toast from "react-hot-toast";
 
 const PreferenceForm = () => {
 	const [types, setTypes] = useState<Array<Types>>([]);
 	const [open, setOpen] = useState(false);
-	const [newTypeName, setNewTypeName] = useState("");
 	const formSchema = preferenceSchema();
 	const [isLoading, setIsLoading] = useState(false);
 	const [edit, setEdit] = useState(false);
@@ -31,12 +32,21 @@ const PreferenceForm = () => {
 		defaultValues: {
 			name: "",
 			email: "",
+			password: "",
+			budget: 0,
 		},
 	});
 
 	async function onSubmit(data: z.infer<typeof formSchema>) {
 		setIsLoading(true);
 		try {
+			await toast.promise(updateProfile(data), {
+				loading: "Updating transaction..",
+				success: "Transcation updated!",
+				error: "Error occured",
+			});
+
+			location.reload();
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -59,8 +69,15 @@ const PreferenceForm = () => {
 	useEffect(() => {
 		const fetchType = async () => {
 			try {
-				const user = await getUser();
-				const types = await getTypes(user.id);
+				const user = await getProfile();
+				const types = await getTypes(user.data.id);
+
+				form.reset({
+					name: user.data.name,
+					email: user.data.email,
+					budget: user.data.budget,
+				});
+
 				setTypes(types as Type[]);
 			} catch (error) {
 				console.log(error);
@@ -68,7 +85,7 @@ const PreferenceForm = () => {
 		};
 
 		fetchType();
-	}, []);
+	}, [form]);
 
 	return (
 		<>

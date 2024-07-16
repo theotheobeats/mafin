@@ -36,7 +36,7 @@ export const preferenceSchema = () =>
 	z.object({
 		name: z.string().min(8),
 		email: z.string().email(),
-		password: z.string().min(2),
+		password: z.string(),
 		budget: z.coerce.number({
 			required_error: "Please enter your monthly spending limit.",
 		}),
