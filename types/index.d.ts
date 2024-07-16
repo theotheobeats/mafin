@@ -6,6 +6,7 @@ declare type Category = {
 declare type Type = {
 	id: bigint;
 	name: string;
+	color: string;
 	userId: bigint;
 };
 
@@ -55,5 +56,7 @@ declare type TodayTotalProps = {
 };
 
 declare type Types = {
+	id: bigint;
 	name: string;
+	color: string;
 };

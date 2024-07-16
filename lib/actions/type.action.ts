@@ -1,8 +1,10 @@
+"use server";
+
 import { createClient } from "@/utils/supabase/server";
 import { getUser } from "./auth.action";
 import { parseStringify } from "../utils";
 
-export async function addType(data: { name: string }) {
+export async function addType(name: string, color: string) {
 	const supabase = createClient();
 
 	try {
@@ -15,7 +17,7 @@ export async function addType(data: { name: string }) {
 		const { data: existingTypes, error: fetchError } = await supabase
 			.from("types")
 			.select("*")
-			.eq("name", data.name)
+			.eq("name", name)
 			.eq("userId", user.id);
 
 		if (fetchError) {
@@ -30,7 +32,8 @@ export async function addType(data: { name: string }) {
 			.from("types")
 			.insert([
 				{
-					name: data.name,
+					name: name,
+					color: color,
 					userId: user.id,
 				},
 			]);
@@ -46,7 +49,7 @@ export async function addType(data: { name: string }) {
 	}
 }
 
-export async function updateType(data: { id: bigint; name: string }) {
+export async function updateType(name: string, color: string, typeId: bigint) {
 	const supabase = createClient();
 
 	try {
@@ -56,11 +59,12 @@ export async function updateType(data: { id: bigint; name: string }) {
 			.from("types")
 			.update([
 				{
-					name: data.name,
+					name: name,
 					userId: user.id,
+					color: color,
 				},
 			])
-			.eq("id", data.id)
+			.eq("id", typeId)
 			.eq("userId", user.id)
 			.single();
 
@@ -85,6 +89,23 @@ export async function deleteType(id: any) {
 			.delete()
 			.eq("id", id)
 			.eq("userId", user.id);
+
+		return parseStringify(response);
+	} catch (error) {
+		return error;
+	}
+}
+
+export async function getType(id: any) {
+	const supabase = createClient();
+	try {
+		const user = await getUser();
+		const response = await supabase
+			.from("types")
+			.select("*")
+			.eq("id", id)
+			.eq("userId", user.id)
+			.single();
 
 		return parseStringify(response);
 	} catch (error) {

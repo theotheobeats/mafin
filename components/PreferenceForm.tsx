@@ -15,12 +15,16 @@ import { z } from "zod";
 import { Button } from "./ui/button";
 import { getTypes } from "@/lib/actions/helper.action";
 import { getUser } from "@/lib/actions/auth.action";
+import TypeModal from "./TypeModal";
 
 const PreferenceForm = () => {
 	const [types, setTypes] = useState<Array<Types>>([]);
+	const [open, setOpen] = useState(false);
 	const [newTypeName, setNewTypeName] = useState("");
 	const formSchema = preferenceSchema();
 	const [isLoading, setIsLoading] = useState(false);
+	const [edit, setEdit] = useState(false);
+	const [typeId, setTypeId] = useState(null);
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -40,9 +44,17 @@ const PreferenceForm = () => {
 		}
 	}
 
-	function handleDeleteType() {}
+	// TYPES CODE BLOCK
+	function handleEditType(id: any) {
+		setEdit(true);
+		setTypeId(id);
+		setOpen(true);
+	}
 
-	const handleAddType = () => {};
+	const handleAddType = () => {
+		setEdit(false);
+		setOpen(true);
+	};
 
 	useEffect(() => {
 		const fetchType = async () => {
@@ -128,42 +140,21 @@ const PreferenceForm = () => {
 							</FormItem>
 						)}
 					/>
-					<FormField
-						control={form.control}
-						name="budget"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Types</FormLabel>
-								<FormControl>
-									<div className="flex gap-4">
-										<Input
-											placeholder="Add more transaction type"
-											{...field}
-											onChange={(e) => setNewTypeName(e.target.value)}
-											type="color"
-										/>
-										<Button type="button" onClick={handleAddType}>
-											+
-										</Button>
-									</div>
-								</FormControl>
-							</FormItem>
-						)}
-					/>
+					<p className="text-xs italic text-red-600 font-semibold mt-4">
+						add or remove your transaction tags here
+					</p>
 					<div className="flex gap-2">
 						{types.map((item, index) => (
 							<span
-								className="bg-slate-700 rounded-xl p-2 text-xs text-white cursor-pointer"
-								key={index}>
+								className="bg-black rounded-xl p-2 text-xs text-white cursor-pointer hover:bg-slate-600 transition-colors"
+								key={index}
+								onClick={() => handleEditType(item.id)}>
 								{item.name}{" "}
-								<span
-									className="hover:text-slate-600 cursor-pointer text-xs ml-4"
-									onClick={() => handleDeleteType()}>
-									{" "}
-									x{" "}
-								</span>
 							</span>
 						))}
+						<Button type="button" onClick={handleAddType}>
+							+
+						</Button>
 					</div>
 
 					<br />
@@ -174,6 +165,8 @@ const PreferenceForm = () => {
 					</Button>
 				</form>
 			</Form>
+
+			<TypeModal open={open} setOpen={setOpen} edit={edit} typeId={typeId} />
 		</>
 	);
 };

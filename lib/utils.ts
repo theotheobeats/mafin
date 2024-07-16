@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { z } from "zod";
+import { bigint, z } from "zod";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -37,6 +37,14 @@ export const preferenceSchema = () =>
 		name: z.string().min(8),
 		email: z.string().email(),
 		password: z.string().min(2),
-		type: z.string().min(2),
-		budget: z.coerce.number({ required_error: "Please enter your monthly spending limit." }),
+		budget: z.coerce.number({
+			required_error: "Please enter your monthly spending limit.",
+		}),
+	});
+
+export const typeSchema = () =>
+	z.object({
+		id: z.bigint(),
+		name: z.string().min(2),
+		color: z.string().min(5),
 	});
