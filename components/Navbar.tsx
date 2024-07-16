@@ -81,7 +81,7 @@ const Navbar = () => {
 						</div>
 
 						<div className="hover:bg-slate-800 hover:rounded-sm cursor-pointer transition-all px-2 py-2">
-							<Link href="/setting">
+							<Link href="/preference">
 								<div className="icon-wrapper p-2 rounded-sm">
 									<svg
 										width="20"
@@ -212,7 +212,7 @@ const Navbar = () => {
 					</Link>
 				</div>
 				<div className="hover:bg-slate-800 hover:rounded-sm cursor-pointer transition-all px-2 py-2">
-					<Link href="/setting">
+					<Link href="/preference">
 						<div className="icon-wrapper p-2 rounded-sm">
 							<svg
 								width="20"

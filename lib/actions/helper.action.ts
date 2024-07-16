@@ -3,10 +3,14 @@
 import { createClient } from "@/utils/supabase/server";
 import { getTransactionData } from "./transaction.action";
 import { parseStringify } from "../utils";
+import { getUser } from "./auth.action";
 
-export async function getTypes() {
+export async function getTypes(userId: bigint) {
 	const supabase = createClient();
-	const { data, error } = await supabase.from("types").select("*");
+	const { data, error } = await supabase
+		.from("types")
+		.select("*")
+		.eq("userId", userId);
 
 	if (error) {
 		throw new Error(`Error fetching types: ${error.message}`);

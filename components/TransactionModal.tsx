@@ -39,6 +39,7 @@ import toast from "react-hot-toast";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { Calendar } from "./ui/calendar";
+import { getUser } from "@/lib/actions/auth.action";
 
 const TransactionModal = ({
 	fetchTransactionData,
@@ -50,6 +51,7 @@ const TransactionModal = ({
 }: any) => {
 	const [types, setTypes] = useState<Type[]>([]);
 	const [categories, setCategories] = useState<Category[]>([]);
+	const [userData, setUserData] = useState(null);
 	const formSchema = transactionFormSchema();
 	const [selectedTransaction, setSelectedTransaction] =
 		useState<SingleTransaction>();
@@ -67,8 +69,10 @@ const TransactionModal = ({
 		const fetchDatas = async () => {
 			setLoading(true);
 			try {
+				const userData = await getUser();
+
 				const [typesData, categoriesData] = await Promise.all([
-					getTypes(),
+					getTypes(userData.id),
 					getCategories(),
 				]);
 

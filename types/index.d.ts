@@ -6,6 +6,7 @@ declare type Category = {
 declare type Type = {
 	id: bigint;
 	name: string;
+	userId: bigint;
 };
 
 declare type TransactionColumnProps = {
@@ -51,4 +52,8 @@ declare type TodayTotalProps = {
 	income: number;
 	expense: number;
 	error: any;
+};
+
+declare type Types = {
+	name: string;
 };

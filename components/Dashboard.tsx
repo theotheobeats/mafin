@@ -37,6 +37,7 @@ const pieChartData = [
 	{ browser: "edge", visitors: 173, fill: "var(--color-edge)" },
 	{ browser: "other", visitors: 190, fill: "var(--color-other)" },
 ];
+
 const pieChartConfig = {
 	visitors: {
 		label: "Visitors",
@@ -133,11 +134,11 @@ const Dashboard = ({ userData }: any) => {
 				<div className="flex gap-4 justify-evenly w-full">
 					<div className="bg-gradient-to-tr from-emerald-200 to-lime-300 text-black rounded-lg w-full shadow-sm p-4">
 						<h1 className="text-xs">Today Income</h1>
-						<h1 className="sm:md:lg:text-2xl font-bold">- {todayExpenses}</h1>
+						<h1 className="sm:md:lg:text-2xl font-bold">+ {todayIncomes}</h1>
 					</div>
 					<div className="bg-gradient-to-tr from-red-200 to-red-300 text-black rounded-lg w-full shadow-md p-4">
 						<h1 className="text-xs">Today Spending</h1>
-						<h1 className="sm:md:lg:text-2xl font-bold">+ {todayIncomes}</h1>
+						<h1 className="sm:md:lg:text-2xl font-bold">- {todayExpenses}</h1>
 					</div>
 				</div>
 

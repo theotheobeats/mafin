@@ -28,26 +28,41 @@ export async function signup(data: {
 }) {
 	const supabase = createClient();
 
-	const response = await supabase.auth.signUp({
+	const { error, data: authData } = await supabase.auth.signUp({
 		email: data.email,
 		password: data.password,
 	});
 
-	if (response.error) {
-		console.log(response.error);
+	if (error) {
+		console.log(error);
 		return;
-	} else {
-		const user = response.data.user;
+	}
 
-		console.log(user?.id);
+	const user = authData.user;
+	if (user) {
+		console.log(user.id);
 
-		const { error } = await supabase
-			.from("profiles")
-			.insert([{ name: data.name, email: data.email }]);
+		try {
+			const { data: profileData, error: profileError } = await supabase
+				.from("profiles")
+				.insert([{ name: data.name, email: data.email, id: user.id }])
+				.single();
 
-		if (error) {
-			console.error("Error inserting profile:", error);
-			return;
+			if (profileError) {
+				console.log(profileError);
+				return;
+			}
+
+			const { error: typeError } = await supabase
+				.from("types")
+				.insert([{ name: "Primary", userId: user.id }]);
+
+			if (typeError) {
+				console.log(typeError);
+				return;
+			}
+		} catch (error) {
+			console.log(error);
 		}
 	}
 
