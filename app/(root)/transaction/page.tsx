@@ -50,11 +50,12 @@ const Page = () => {
 							</div>
 						</div>
 					</div>
-					<p className="text-slate-400">Manage your recent transactions here.</p>
+					<p className="text-slate-400">
+						Manage your recent transactions here.
+					</p>
 				</div>
-				<hr className="py-2"/>
+				<hr className="py-2" />
 				<div>
-
 					<div className="pb-4">
 						<h2 className="font-semibold">Your today&apos;s transaction.</h2>
 					</div>

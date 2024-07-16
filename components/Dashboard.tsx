@@ -1,4 +1,7 @@
-import { getTodayTotalExpenses } from "@/lib/actions/helper.action";
+import {
+	getLatestTransactions,
+	getTodayTotalExpenses,
+} from "@/lib/actions/helper.action";
 import React, { useEffect, useState } from "react";
 
 import {
@@ -29,6 +32,8 @@ import {
 	XAxis,
 } from "recharts";
 import { TrendingUp } from "lucide-react";
+import Link from "next/link";
+import TransactionItem from "./TransactionItem";
 
 const pieChartData = [
 	{ browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
@@ -94,8 +99,9 @@ function formatNumber(number: number) {
 }
 
 const Dashboard = ({ userData }: any) => {
-	const [todayExpenses, setTodayExpenses] = useState<number>(0);
-	const [todayIncomes, setTodayIncomes] = useState<number>(0);
+	const [todayExpenses, setTodayExpenses] = useState(0);
+	const [todayIncomes, setTodayIncomes] = useState(0);
+	const [transactions, setTransactions] = useState([]);
 	const date = getTodayDate();
 
 	const totalVisitors = React.useMemo(() => {
@@ -105,9 +111,14 @@ const Dashboard = ({ userData }: any) => {
 	useEffect(() => {
 		const fetchUserData = async () => {
 			try {
-				const data: TodayTotalProps = await getTodayTotalExpenses(date);
+				const data = await getTodayTotalExpenses(date);
+				const latestTransaction = await getLatestTransactions();
+
+				console.log(latestTransaction);
+
 				setTodayExpenses(formatNumber(data.expense));
 				setTodayIncomes(formatNumber(data.income));
+				setTransactions(latestTransaction);
 			} catch (error) {
 				console.error("Error data:", error);
 			}
@@ -130,29 +141,69 @@ const Dashboard = ({ userData }: any) => {
 			</div>
 			<br />
 			<hr />
-			<div className="flex mt-8 gap-4 sm:md:lg:h-[200px] h-[100px]">
+			<div className="flex mt-8 gap-4 sm:md:lg:h-[225px] h-[100px]">
 				<div className="flex gap-4 justify-evenly w-full">
-					<div className="bg-gradient-to-tr from-emerald-200 to-lime-300 text-black rounded-lg w-full shadow-sm p-4">
+					<div className="bg-green-400 text-black rounded-lg w-full shadow-sm p-4">
 						<h1 className="text-xs">Today Income</h1>
-						<h1 className="sm:md:lg:text-2xl font-bold">+ {todayIncomes}</h1>
+						<h1 className="sm:md:lg:text-xl font-bold text-sm">+ {todayIncomes}</h1>
 					</div>
-					<div className="bg-gradient-to-tr from-red-200 to-red-300 text-black rounded-lg w-full shadow-md p-4">
+					<div className="bg-red-400 text-black rounded-lg w-full shadow-sm p-4">
 						<h1 className="text-xs">Today Spending</h1>
-						<h1 className="sm:md:lg:text-2xl font-bold">- {todayExpenses}</h1>
+						<h1 className="sm:md:lg:text-xl font-bold text-sm">- {todayExpenses}</h1>
 					</div>
 				</div>
 
-				<div className="hidden sm:md:lg:block bg-gradient-to-tr from-slate-50 to-slate-100 text-black rounded-lg w-full shadow-md p-4">
-					<h1 className="text-xs">Recent Transaction</h1>
-					<h1 className="sm:md:lg:text-2xl font-bold">+ {todayIncomes}</h1>
+				<div className="hidden sm:md:lg:block bg-white text-black rounded-lg w-full shadow-sm p-4 outline-dashed outline-2 outline-offset-[-3px] outline-slate-400">
+					<div className="p-2">
+						<div className="flex justify-between">
+							<h1 className="text-xl font-bold">Recent Transaction</h1>
+							<Link href="/transaction">
+								<span className="text-xs font-slate-300 hover:text-slate-300 underline">
+									See all
+								</span>
+							</Link>
+						</div>
+						<div className="mt-4">
+							{transactions.map((item: any) => (
+								<div key={item.id}>
+									<TransactionItem
+										name={item.name}
+										date={item.date}
+										categories={item.categories.name}
+										amount={item.amount}
+									/>
+								</div>
+							))}
+						</div>
+					</div>
 				</div>
 			</div>
-			<div className="sm:md:lg:hidden mt-4 bg-gradient-to-tr from-slate-50 to-slate-100 text-black rounded-lg w-full shadow-md p-4">
-				<h1 className="text-xs">Recent Transaction</h1>
-				<h1 className="sm:md:lg:text-2xl font-bold">+ {todayIncomes}</h1>
+			<div className="sm:md:lg:hidden mt-8 bg-white text-black rounded-lg w-full shadow-sm p-4 outline-dashed outline-2 outline-offset-[-3px] outline-slate-400">
+				<div className="p-2">
+					<div className="flex justify-between">
+						<h1 className="font-bold">Recent Transaction</h1>
+						<Link href="/transaction">
+							<span className="text-xs font-slate-300 hover:text-slate-300 underline">
+								See all
+							</span>
+						</Link>
+					</div>
+					<div className="mt-4">
+						{transactions.map((item: any) => (
+							<div key={item.id}>
+								<TransactionItem
+									name={item.name}
+									date={item.date}
+									categories={item.categories.name}
+									amount={item.amount}
+								/>
+							</div>
+						))}
+					</div>
+				</div>
 			</div>
 			<div className="sm:md:lg:flex mt-8 gap-8 overflow-hidden">
-				<div className="w-full shadow-md p-4 rounded-xl mb-4">
+				<div className="w-full shadow-sm p-4 rounded-xl mb-4 bg-white">
 					<h1 className="font-bold">Category Spending</h1>
 					<ChartContainer
 						config={pieChartConfig}
@@ -198,7 +249,7 @@ const Dashboard = ({ userData }: any) => {
 						</PieChart>
 					</ChartContainer>
 				</div>
-				<div className="w-full shadow-md rounded-xl p-4 mb-4">
+				{/* <div className="w-full shadow-sm rounded-xl p-4 mb-4 bg-white">
 					<div className="font-bold">6-Month Spending Statistic</div>
 					<ChartContainer config={chartConfig} className="mx-auto my-auto">
 						<AreaChart
@@ -238,7 +289,7 @@ const Dashboard = ({ userData }: any) => {
 							/>
 						</AreaChart>
 					</ChartContainer>
-				</div>
+				</div> */}
 			</div>
 			{/* <div>Recent Transactions up to 10 transaction only.</div> */}
 		</section>

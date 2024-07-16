@@ -74,3 +74,26 @@ export async function getTodayTotalExpenses(date: any) {
 		return error;
 	}
 }
+
+export async function getLatestTransactions() {
+	const supabase = createClient();
+
+	const { data, error } = await supabase
+		.from("transactions")
+		.select(
+			`
+			*,
+			types ( name ), 
+			categories ( name )
+		  `
+		)
+		.order("created_at", { ascending: false })
+		.limit(3);
+
+	if (error) {
+		console.error("Error fetching transactions:", error);
+		return null;
+	}
+
+	return data;
+}
