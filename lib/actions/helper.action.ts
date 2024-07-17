@@ -128,10 +128,12 @@ export async function getThisMonthTotalExpense() {
 		.lte("date", endOfMonth);
 
 	// Filter transactions by category name
-	const expenseTransactions = transactions!.filter((transaction) =>
-		transaction.categories.some((category) => category.name === "Expense")
+	const expenseTransactions = transactions!.filter(
+		(transaction) =>
+			Array.isArray(transaction.categories) &&
+			transaction.categories.some((category) => category.name === "Expense")
 	);
-
+	
 	// summing the amount
 	const totalSpent = expenseTransactions.reduce(
 		(sum, transaction) => sum + transaction.amount,

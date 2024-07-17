@@ -119,8 +119,11 @@ const Dashboard = ({ userData }: any) => {
 				const latestTransaction = await getLatestTransactions();
 				const thisMonthTotalExpenseData = await getThisMonthTotalExpense();
 
-				setTodayExpenses(Number(formatNumber(data.expense)));
-				setTodayIncomes(Number(formatNumber(data.income)));
+				let expense = parseFloat(data.expense);
+				let income = parseFloat(data.income);
+
+				setTodayExpenses(Number(expense));
+				setTodayIncomes(Number(income));
 				setTransactions(latestTransaction as Transaction[]);
 				setThisMonthTotalExpense(thisMonthTotalExpenseData);
 			} catch (error) {
@@ -150,13 +153,13 @@ const Dashboard = ({ userData }: any) => {
 							<div className="text-black rounded-lg w-full bg-slate-50 shadow-sm p-4">
 								<h1 className="text-xs">Today Income</h1>
 								<h1 className="sm:md:lg:text-xl font-bold text-sm text-green-400">
-									+ {todayIncomes}
+									+ {formatNumber(todayIncomes)}
 								</h1>
 							</div>
 							<div className="text-black rounded-lg w-full shadow-sm p-4 bg-slate-50">
 								<h1 className="text-xs">Today Spending</h1>
 								<h1 className="sm:md:lg:text-xl font-bold text-sm text-red-400">
-									- {todayExpenses}
+									- {formatNumber(todayExpenses)}
 								</h1>
 							</div>
 						</div>
