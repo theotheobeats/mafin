@@ -102,7 +102,7 @@ export async function getType(id: any) {
 		const user = await getUser();
 		const response = await supabase
 			.from("types")
-			.select("*")
+			.select()
 			.eq("id", id)
 			.eq("userId", user.id)
 			.single();

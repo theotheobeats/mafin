@@ -10,7 +10,7 @@ export async function getTypes(userId: bigint) {
 	const supabase = createClient();
 	const { data, error } = await supabase
 		.from("types")
-		.select("*")
+		.select()
 		.eq("userId", userId);
 
 	if (error) {
@@ -104,9 +104,11 @@ export async function getLatestTransactions() {
 	return data;
 }
 
-export async function getThisMonthTotalExpense() {
+export async function getThisMonthTotalExpense(
+	userId: bigint,
+	userBudget: number
+) {
 	const supabase = createClient();
-	const user = await getProfile();
 	const today = new Date();
 	const firstOfMonth = new Date(
 		Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1)
@@ -123,7 +125,7 @@ export async function getThisMonthTotalExpense() {
 			categories ( name )
 		  `
 		)
-		.eq("userId", user.data.id)
+		.eq("userId", userId)
 		.gte("date", firstOfMonth)
 		.lte("date", endOfMonth);
 
@@ -138,7 +140,7 @@ export async function getThisMonthTotalExpense() {
 		0
 	);
 
-	const budget = user.data.budget;
+	const budget = userBudget;
 
 	// Calculate the percentage of the budget spent
 	const percentageSpent = parseFloat(((totalSpent / budget) * 100).toFixed(2));

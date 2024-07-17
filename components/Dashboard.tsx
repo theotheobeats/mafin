@@ -42,10 +42,13 @@ const Dashboard = () => {
 	useEffect(() => {
 		const fetchUserData = async () => {
 			try {
+				const userData = await getProfile();
 				const data: any = await getTodayTotalExpenses(date);
 				const latestTransaction = await getLatestTransactions();
-				const thisMonthTotalExpenseData = await getThisMonthTotalExpense();
-				const userData = await getProfile();
+				const thisMonthTotalExpenseData = await getThisMonthTotalExpense(
+					userData.data.id,
+					userData.data.budget
+				);
 
 				let expense = parseFloat(data.expense);
 				let income = parseFloat(data.income);
