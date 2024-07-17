@@ -20,14 +20,12 @@ export async function getProfile() {
 	}
 }
 
-export async function updateProfile(
-	data: {
-		name: string;
-		email: string;
-		password: string;
-		budget: number;
-	},
-) {
+export async function updateProfile(data: {
+	name: string;
+	email: string;
+	password: string;
+	budget: number;
+}) {
 	const supabase = createClient();
 
 	try {

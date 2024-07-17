@@ -1,5 +1,6 @@
 import {
 	getLatestTransactions,
+	getThisMonthTotalExpense,
 	getTodayTotalExpenses,
 } from "@/lib/actions/helper.action";
 import React, { useEffect, useState } from "react";
@@ -34,6 +35,7 @@ import {
 import { TrendingUp } from "lucide-react";
 import Link from "next/link";
 import TransactionItem from "./TransactionItem";
+import { Progress } from "./ui/progress";
 
 const pieChartData = [
 	{ browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
@@ -101,7 +103,10 @@ function formatNumber(number: number) {
 const Dashboard = ({ userData }: any) => {
 	const [todayExpenses, setTodayExpenses] = useState(0);
 	const [todayIncomes, setTodayIncomes] = useState(0);
-	const [transactions, setTransactions] = useState([]);
+	const [transactions, setTransactions] = useState<Transaction[]>([]);
+	const [thisMonthTotalExpense, setThisMonthTotalExpense] = useState<
+		ThisMonthTotalExpense[]
+	>([]);
 	const date = getTodayDate();
 
 	const totalVisitors = React.useMemo(() => {
@@ -113,12 +118,16 @@ const Dashboard = ({ userData }: any) => {
 			try {
 				const data = await getTodayTotalExpenses(date);
 				const latestTransaction = await getLatestTransactions();
+				const thisMonthTotalExpenseData = await getThisMonthTotalExpense();
 
-				console.log(latestTransaction);
+				console.log(thisMonthTotalExpenseData);
 
 				setTodayExpenses(formatNumber(data.expense));
 				setTodayIncomes(formatNumber(data.income));
-				setTransactions(latestTransaction);
+				setTransactions(latestTransaction as Transaction[]);
+				setThisMonthTotalExpense(
+					thisMonthTotalExpenseData as ThisMonthTotalExpense[]
+				);
 			} catch (error) {
 				console.error("Error data:", error);
 			}
@@ -126,8 +135,6 @@ const Dashboard = ({ userData }: any) => {
 
 		fetchUserData();
 	}, [date]);
-
-	console.log(todayExpenses);
 
 	return (
 		<section>
@@ -141,15 +148,41 @@ const Dashboard = ({ userData }: any) => {
 			</div>
 			<br />
 			<hr />
-			<div className="flex mt-8 gap-4 sm:md:lg:h-[225px] h-[100px]">
-				<div className="flex gap-4 justify-evenly w-full">
-					<div className="bg-green-400 text-black rounded-lg w-full shadow-sm p-4">
-						<h1 className="text-xs">Today Income</h1>
-						<h1 className="sm:md:lg:text-xl font-bold text-sm">+ {todayIncomes}</h1>
+			<div className="flex mt-4 sm:md:lg:mt-8 gap-4 sm:md:lg:h-[225px] h-[100px]">
+				<div className="flex-col justify-evenly gap-4 w-full">
+					<div className="w-full">
+						<div className="flex gap-4 justify-evenly w-full">
+							<div className="text-black rounded-lg w-full bg-slate-50 shadow-sm p-4">
+								<h1 className="text-xs">Today Income</h1>
+								<h1 className="sm:md:lg:text-xl font-bold text-sm text-green-400">
+									+ {todayIncomes}
+								</h1>
+							</div>
+							<div className="text-black rounded-lg w-full shadow-sm p-4 bg-slate-50">
+								<h1 className="text-xs">Today Spending</h1>
+								<h1 className="sm:md:lg:text-xl font-bold text-sm text-red-400">
+									- {todayExpenses}
+								</h1>
+							</div>
+						</div>
 					</div>
-					<div className="bg-red-400 text-black rounded-lg w-full shadow-sm p-4">
-						<h1 className="text-xs">Today Spending</h1>
-						<h1 className="sm:md:lg:text-xl font-bold text-sm">- {todayExpenses}</h1>
+					<div className="w-full mt-4">
+						<div className="text-black rounded-lg w-full bg-slate-50 shadow-sm p-4 sm:md:lg:h-[130px]">
+							<h1 className="text-xs">Budget</h1>
+							<h1 className="sm:md:lg:text-xl font-bold text-sm text-green-400">
+								<Progress
+									className="my-2"
+									value={thisMonthTotalExpense.percentageSpent}
+								/>
+								<span className="text-red-500">
+									{formatNumber(thisMonthTotalExpense?.totalSpent)}
+								</span>
+								/
+								<span className="text-xs">
+									{formatNumber(userData?.budget)}
+								</span>
+							</h1>
+						</div>
 					</div>
 				</div>
 
@@ -178,7 +211,8 @@ const Dashboard = ({ userData }: any) => {
 					</div>
 				</div>
 			</div>
-			<div className="sm:md:lg:hidden mt-8 bg-white text-black rounded-lg w-full shadow-sm p-4 outline-dashed outline-2 outline-offset-[-3px] outline-slate-400">
+			<br />
+			<div className="sm:md:lg:hidden mt-20 bg-white text-black rounded-lg w-full shadow-sm p-4 outline-dashed outline-2 outline-offset-[-3px] outline-slate-400">
 				<div className="p-2">
 					<div className="flex justify-between">
 						<h1 className="font-bold">Recent Transaction</h1>
@@ -203,7 +237,7 @@ const Dashboard = ({ userData }: any) => {
 				</div>
 			</div>
 			<div className="sm:md:lg:flex mt-8 gap-8 overflow-hidden">
-				<div className="w-full shadow-sm p-4 rounded-xl mb-4 bg-white">
+				{/* <div className="w-full shadow-sm p-4 rounded-xl mb-4 bg-white">
 					<h1 className="font-bold">Category Spending</h1>
 					<ChartContainer
 						config={pieChartConfig}
@@ -238,7 +272,7 @@ const Dashboard = ({ userData }: any) => {
 														x={viewBox.cx}
 														y={(viewBox.cy || 0) + 24}
 														className="fill-muted-foreground">
-														Visitors
+														Total Spent
 													</tspan>
 												</text>
 											);
@@ -248,7 +282,7 @@ const Dashboard = ({ userData }: any) => {
 							</Pie>
 						</PieChart>
 					</ChartContainer>
-				</div>
+				</div> */}
 				{/* <div className="w-full shadow-sm rounded-xl p-4 mb-4 bg-white">
 					<div className="font-bold">6-Month Spending Statistic</div>
 					<ChartContainer config={chartConfig} className="mx-auto my-auto">

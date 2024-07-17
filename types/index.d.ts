@@ -60,3 +60,8 @@ declare type Types = {
 	name: string;
 	color: string;
 };
+
+declare type ThisMonthTotalExpense = {
+	totalSpent: number;
+	spentPercentage: number;
+};

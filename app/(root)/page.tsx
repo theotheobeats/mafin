@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { getUser, signout } from "@/lib/actions/auth.action";
 import { getTodayTotalExpenses } from "@/lib/actions/helper.action";
+import { getProfile } from "@/lib/actions/profile.action";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -14,8 +15,10 @@ const Page = () => {
 	useEffect(() => {
 		const fetchUserData = async () => {
 			try {
-				const data = await getUser();
-				setUserData(data);
+				const data = await getProfile();
+
+				console.log(data);
+				setUserData(data.data);
 			} catch (error) {
 				console.error("Error fetching user data:", error);
 			}
