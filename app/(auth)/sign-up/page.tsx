@@ -5,7 +5,7 @@ import React from "react";
 
 const SignUp = () => {
 	return (
-		<section className="mx-auto my-auto w-[30rem] p-16 shadow-xl rounded-2xl">
+		<section className="mx-auto my-auto w-[30rem] p-16">
 			<AuthForm type="/sign-up" />
 		</section>
 	);

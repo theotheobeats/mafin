@@ -27,7 +27,7 @@ const SignIn = () => {
 	}
 
 	return (
-		<section className="mx-auto my-auto w-[30rem] p-16 shadow-xl rounded-2xl">
+		<section className="mx-auto my-auto w-[30rem] p-16 rounded-2xl">
 			<AuthForm type="/sign-in" />
 		</section>
 	);
