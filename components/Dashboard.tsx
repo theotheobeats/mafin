@@ -101,12 +101,10 @@ function formatNumber(number: number) {
 }
 
 const Dashboard = ({ userData }: any) => {
-	const [todayExpenses, setTodayExpenses] = useState(0);
-	const [todayIncomes, setTodayIncomes] = useState(0);
+	const [todayExpenses, setTodayExpenses] = useState<number>(0);
+	const [todayIncomes, setTodayIncomes] = useState<number>(0);
 	const [transactions, setTransactions] = useState<Transaction[]>([]);
-	const [thisMonthTotalExpense, setThisMonthTotalExpense] = useState<
-		ThisMonthTotalExpense[]
-	>([]);
+	const [thisMonthTotalExpense, setThisMonthTotalExpense] = useState<ThisMonthTotalExpense | null>(null);
 	const date = getTodayDate();
 
 	const totalVisitors = React.useMemo(() => {
@@ -116,18 +114,14 @@ const Dashboard = ({ userData }: any) => {
 	useEffect(() => {
 		const fetchUserData = async () => {
 			try {
-				const data = await getTodayTotalExpenses(date);
+				const data: any = await getTodayTotalExpenses(date);
 				const latestTransaction = await getLatestTransactions();
 				const thisMonthTotalExpenseData = await getThisMonthTotalExpense();
 
-				console.log(thisMonthTotalExpenseData);
-
-				setTodayExpenses(formatNumber(data.expense));
-				setTodayIncomes(formatNumber(data.income));
+				setTodayExpenses(Number(formatNumber(data.expense)));
+				setTodayIncomes(Number(formatNumber(data.income)));
 				setTransactions(latestTransaction as Transaction[]);
-				setThisMonthTotalExpense(
-					thisMonthTotalExpenseData as ThisMonthTotalExpense[]
-				);
+				setThisMonthTotalExpense(thisMonthTotalExpenseData);
 			} catch (error) {
 				console.error("Error data:", error);
 			}
@@ -172,7 +166,7 @@ const Dashboard = ({ userData }: any) => {
 							<h1 className="sm:md:lg:text-xl font-bold text-sm text-green-400">
 								<Progress
 									className="my-2"
-									value={thisMonthTotalExpense.percentageSpent}
+									value={thisMonthTotalExpense?.percentageSpent}
 								/>
 								<span className="text-red-500">
 									{formatNumber(thisMonthTotalExpense?.totalSpent)}

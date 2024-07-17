@@ -127,13 +127,8 @@ export async function getThisMonthTotalExpense() {
 		.gte("date", firstOfMonth)
 		.lte("date", endOfMonth);
 
-	if (error) {
-		console.error("Error fetching transactions:", error);
-		return null;
-	}
-
 	// Filter transactions by category name
-	const expenseTransactions = transactions.filter(
+	const expenseTransactions = transactions!.filter(
 		(transaction) => transaction.categories.name === "Expense"
 	);
 
@@ -146,7 +141,7 @@ export async function getThisMonthTotalExpense() {
 	const budget = user.data.budget;
 
 	// Calculate the percentage of the budget spent
-	const percentageSpent = ((totalSpent / budget) * 100).toFixed(2);
+	const percentageSpent = parseFloat(((totalSpent / budget) * 100).toFixed(2));
 
 	return {
 		totalSpent,

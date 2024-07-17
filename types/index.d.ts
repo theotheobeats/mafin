@@ -62,6 +62,6 @@ declare type Types = {
 };
 
 declare type ThisMonthTotalExpense = {
+	percentageSpent: number;
 	totalSpent: number;
-	spentPercentage: number;
 };
