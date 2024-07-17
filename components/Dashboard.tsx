@@ -104,7 +104,8 @@ const Dashboard = ({ userData }: any) => {
 	const [todayExpenses, setTodayExpenses] = useState<number>(0);
 	const [todayIncomes, setTodayIncomes] = useState<number>(0);
 	const [transactions, setTransactions] = useState<Transaction[]>([]);
-	const [thisMonthTotalExpense, setThisMonthTotalExpense] = useState<ThisMonthTotalExpense | null>(null);
+	const [thisMonthTotalExpense, setThisMonthTotalExpense] =
+		useState<ThisMonthTotalExpense | null>(null);
 	const date = getTodayDate();
 
 	const totalVisitors = React.useMemo(() => {
@@ -166,14 +167,14 @@ const Dashboard = ({ userData }: any) => {
 							<h1 className="sm:md:lg:text-xl font-bold text-sm text-green-400">
 								<Progress
 									className="my-2"
-									value={thisMonthTotalExpense?.percentageSpent}
+									value={thisMonthTotalExpense?.percentageSpent ?? 0}
 								/>
 								<span className="text-red-500">
-									{formatNumber(thisMonthTotalExpense?.totalSpent)}
+									{formatNumber(thisMonthTotalExpense?.totalSpent ?? 0)}
 								</span>
 								/
 								<span className="text-xs">
-									{formatNumber(userData?.budget)}
+									{formatNumber(userData?.budget ?? 0)}
 								</span>
 							</h1>
 						</div>
