@@ -26,6 +26,7 @@ const PreferenceForm = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [edit, setEdit] = useState(false);
 	const [typeId, setTypeId] = useState(null);
+	const [loading, setLoading] = useState(true);
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -79,6 +80,7 @@ const PreferenceForm = () => {
 				});
 
 				setTypes(types as Type[]);
+				setLoading(false);
 			} catch (error) {
 				console.log(error);
 			}
@@ -89,101 +91,123 @@ const PreferenceForm = () => {
 
 	return (
 		<>
-			<div className="w-full mb-4">
-				<h1 className="text-2xl font-bold mb-2">Preference</h1>
-				<p className="text-xs font-slate-400">
-					Manage your preference here including transaction types and monthly
-					spending limit.
-				</p>
-			</div>
-
-			<hr className="mb-4" />
-
-			<Form {...form}>
-				<form
-					onSubmit={form.handleSubmit(onSubmit)}
-					className="space-y-4 w-full">
-					<div className="flex w-full gap-4">
-						<FormField
-							control={form.control}
-							name="name"
-							render={({ field }) => (
-								<FormItem className="w-full">
-									<FormLabel>Name</FormLabel>
-									<FormControl>
-										<Input placeholder="Name" {...field} className="w-full" />
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="email"
-							render={({ field }) => (
-								<FormItem className="w-full">
-									<FormLabel>Email</FormLabel>
-									<FormControl>
-										<Input placeholder="Email" {...field} />
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-					</div>
-					<FormField
-						control={form.control}
-						name="password"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Password</FormLabel>
-								<FormControl>
-									<Input placeholder="Password" {...field} type="password" />
-								</FormControl>
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="budget"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Spending Limit</FormLabel>
-								<FormControl>
-									<Input
-										placeholder="Spending Limit"
-										{...field}
-										type="number"
-									/>
-								</FormControl>
-							</FormItem>
-						)}
-					/>
-					<p className="text-xs italic text-red-600 font-semibold mt-4">
-						add or remove your transaction tags here
-					</p>
-					<div className="flex gap-2">
-						{types.map((item, index) => (
-							<span
-								className="bg-black rounded-xl p-2 text-xs text-white cursor-pointer hover:bg-slate-600 transition-colors"
-								key={index}
-								onClick={() => handleEditType(item.id)}>
-								{item.name}{" "}
-							</span>
-						))}
-						<Button type="button" onClick={handleAddType}>
-							+
-						</Button>
+			{loading ? (
+				<div>Loading..</div>
+			) : (
+				<>
+					<div className="w-full mb-4">
+						<h1 className="text-2xl font-bold mb-2">Preference</h1>
+						<p className="text-xs font-slate-400">
+							Manage your preference here including transaction types and
+							monthly spending limit.
+						</p>
 					</div>
 
-					<br />
-					<hr />
-					<br />
-					<Button type="submit" className="w-full mt-4" disabled={isLoading}>
-						Save Preference
-					</Button>
-				</form>
-			</Form>
+					<hr className="mb-4" />
 
-			<TypeModal open={open} setOpen={setOpen} edit={edit} typeId={typeId} />
+					<Form {...form}>
+						<form
+							onSubmit={form.handleSubmit(onSubmit)}
+							className="space-y-4 w-full">
+							<div className="flex w-full gap-4">
+								<FormField
+									control={form.control}
+									name="name"
+									render={({ field }) => (
+										<FormItem className="w-full">
+											<FormLabel>Name</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="Name"
+													{...field}
+													className="w-full"
+												/>
+											</FormControl>
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="email"
+									render={({ field }) => (
+										<FormItem className="w-full">
+											<FormLabel>Email</FormLabel>
+											<FormControl>
+												<Input placeholder="Email" {...field} />
+											</FormControl>
+										</FormItem>
+									)}
+								/>
+							</div>
+							<FormField
+								control={form.control}
+								name="password"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Password</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="Password"
+												{...field}
+												type="password"
+											/>
+										</FormControl>
+									</FormItem>
+								)}
+							/>
+							<FormField
+								control={form.control}
+								name="budget"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Spending Limit</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="Spending Limit"
+												{...field}
+												type="number"
+											/>
+										</FormControl>
+									</FormItem>
+								)}
+							/>
+							<p className="text-xs italic text-red-600 font-semibold mt-4">
+								add or remove your transaction tags here
+							</p>
+							<div className="flex gap-2">
+								{types.map((item, index) => (
+									<span
+										className="bg-black rounded-xl p-2 text-xs text-white cursor-pointer hover:bg-slate-600 transition-colors"
+										key={index}
+										onClick={() => handleEditType(item.id)}>
+										{item.name}{" "}
+									</span>
+								))}
+								<Button type="button" onClick={handleAddType}>
+									+
+								</Button>
+							</div>
+
+							<br />
+							<hr />
+							<br />
+							<Button
+								type="submit"
+								className="w-full mt-4"
+								disabled={isLoading}>
+								Save Preference
+							</Button>
+						</form>
+					</Form>
+
+					<TypeModal
+						open={open}
+						setOpen={setOpen}
+						edit={edit}
+						typeId={typeId}
+					/>
+				</>
+			)}
 		</>
 	);
 };
