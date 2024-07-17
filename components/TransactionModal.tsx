@@ -69,7 +69,7 @@ const TransactionModal = ({
 		const fetchDatas = async () => {
 			setLoading(true);
 			try {
-				const userData = await getUser();
+				const userData: any = await getUser();
 
 				const [typesData, categoriesData] = await Promise.all([
 					getTypes(userData.id),

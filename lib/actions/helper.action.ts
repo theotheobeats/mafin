@@ -1,10 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { getTransactionData } from "./transaction.action";
-import { parseStringify } from "../utils";
 import { getUser } from "./auth.action";
-import { getProfile } from "./profile.action";
 
 export async function getTypes(userId: bigint) {
 	const supabase = createClient();
@@ -31,10 +28,9 @@ export async function getCategories() {
 	return data;
 }
 
-export async function getTodayTotalExpenses(date: any) {
+export async function getTodayTotalExpenses(date: any, userId: any) {
 	try {
 		const supabase = createClient();
-		const user = await getUser();
 		const { data, error } = await supabase
 			.from("transactions")
 			.select(
@@ -44,7 +40,7 @@ export async function getTodayTotalExpenses(date: any) {
 		  categories ( name )
 		`
 			)
-			.eq("userId", user.id)
+			.eq("userId", userId)
 			.eq("date", date);
 
 		if (error) {
@@ -78,11 +74,8 @@ export async function getTodayTotalExpenses(date: any) {
 	}
 }
 
-export async function getLatestTransactions() {
+export async function getLatestTransactions(userId: any) {
 	const supabase = createClient();
-
-	const user = await getUser();
-
 	const { data, error } = await supabase
 		.from("transactions")
 		.select(
@@ -93,7 +86,7 @@ export async function getLatestTransactions() {
 		  `
 		)
 		.order("created_at", { ascending: false })
-		.eq("userId", user.id)
+		.eq("userId", userId)
 		.limit(3);
 
 	if (error) {

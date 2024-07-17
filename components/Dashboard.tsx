@@ -45,8 +45,8 @@ const Dashboard = () => {
 			setLoading(true);
 			try {
 				const userData = await getProfile();
-				const data: any = await getTodayTotalExpenses(date);
-				const latestTransaction = await getLatestTransactions();
+				const data: any = await getTodayTotalExpenses(date, userData.data.id);
+				const latestTransaction = await getLatestTransactions(userData.data.id);
 				const thisMonthTotalExpenseData = await getThisMonthTotalExpense(
 					userData.data.id,
 					userData.data.budget

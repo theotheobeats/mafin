@@ -101,15 +101,15 @@ export async function getUser() {
 	const supabase = createClient();
 
 	const user = (await supabase.auth.getUser()).data.user;
-	const { data, error } = await supabase
-		.from("profiles")
-		.select("*")
-		.eq("id", user?.id)
-		.single();
+	// const { data, error } = await supabase
+	// 	.from("profiles")
+	// 	.select()
+	// 	.eq("id", user?.id)
+	// 	.single();
 
-	if (data) {
-		return data;
+	if (user) {
+		return user;
 	} else {
-		return error;
+		throw new Error();
 	}
 }

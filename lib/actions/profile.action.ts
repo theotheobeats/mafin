@@ -10,7 +10,7 @@ export async function getProfile() {
 		const user = await getUser();
 		const response = await supabase
 			.from("profiles")
-			.select()
+			.select("id, name, budget, email")
 			.eq("id", user.id)
 			.single();
 

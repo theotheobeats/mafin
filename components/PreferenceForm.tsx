@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { Button } from "./ui/button";
 import { getTypes } from "@/lib/actions/helper.action";
-import { getUser } from "@/lib/actions/auth.action";
 import TypeModal from "./TypeModal";
 import { getProfile, updateProfile } from "@/lib/actions/profile.action";
 import toast from "react-hot-toast";
