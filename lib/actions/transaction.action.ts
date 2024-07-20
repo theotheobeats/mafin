@@ -95,7 +95,7 @@ export async function getTransactionData() {
 			.from("transactions")
 			.select(
 				`
-				*,
+				id, name, amount, type_id, category_id, date,
 				types ( name ), 
 				categories ( name )
 			  `

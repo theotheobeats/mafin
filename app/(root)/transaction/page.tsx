@@ -17,13 +17,7 @@ const Page = () => {
 	const fetchTransactionData = async () => {
 		try {
 			const transactionData = await getTransactionData();
-			console.log("Transaction data fetched:", transactionData);
-
-			if (Array.isArray(transactionData)) {
-				setTransactions(transactionData as TransactionColumnProps[]);
-			} else {
-				console.error("Fetched data is not an array:", transactionData);
-			}
+			setTransactions(transactionData as TransactionColumnProps[]);
 		} catch (error) {
 			console.log("Error fetching transaction data:", error);
 		}

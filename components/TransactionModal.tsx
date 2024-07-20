@@ -51,7 +51,6 @@ const TransactionModal = ({
 }: any) => {
 	const [types, setTypes] = useState<Type[]>([]);
 	const [categories, setCategories] = useState<Category[]>([]);
-	const [userData, setUserData] = useState(null);
 	const formSchema = transactionFormSchema();
 	const [selectedTransaction, setSelectedTransaction] =
 		useState<SingleTransaction>();

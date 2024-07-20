@@ -18,7 +18,7 @@ export async function getTypes(userId: bigint) {
 
 export async function getCategories() {
 	const supabase = createClient();
-	const { data, error } = await supabase.from("categories").select("*");
+	const { data, error } = await supabase.from("categories").select("id, name");
 
 	if (error) {
 		throw new Error(`Error fetching categories: ${error.message}`);
