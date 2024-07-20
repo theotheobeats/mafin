@@ -1,13 +1,12 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { getUser } from "./auth.action";
 
 export async function getTypes(userId: bigint) {
 	const supabase = createClient();
 	const { data, error } = await supabase
 		.from("types")
-		.select()
+		.select("id, name, userId")
 		.eq("userId", userId);
 
 	if (error) {

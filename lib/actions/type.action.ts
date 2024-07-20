@@ -16,7 +16,7 @@ export async function addType(name: string, color: string) {
 
 		const { data: existingTypes, error: fetchError } = await supabase
 			.from("types")
-			.select("*")
+			.select("id, name")
 			.eq("name", name)
 			.eq("userId", user.id);
 
@@ -102,7 +102,7 @@ export async function getType(id: any) {
 		const user = await getUser();
 		const response = await supabase
 			.from("types")
-			.select()
+			.select("id, name, userId")
 			.eq("id", id)
 			.eq("userId", user.id)
 			.single();
