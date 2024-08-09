@@ -61,7 +61,7 @@ const AuthForm = ({ type }: { type: string }) => {
 		<div className="flex h-screen items-center justify-center overflow-hidden">
 			<div className="flex w-full h-screen">
 				<div className="md:w-1/2">
-					<div className="w-[24rem] items-center mx-auto my-auto mt-48">
+					<div className="w-[24rem] items-center mx-auto my-auto mt-44">
 						<div className="text-[4rem] text-center font-bold mb-8">
 							<h1 className="text-black">MAFIN.</h1>
 							<p className="text-xs text-slate-200 font-sans">
