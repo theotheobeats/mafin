@@ -19,6 +19,7 @@ import { login, signup } from "@/lib/actions/auth.action";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const AuthForm = ({ type }: { type: string }) => {
 	const formSchema = authFormSchema(type);
@@ -57,91 +58,114 @@ const AuthForm = ({ type }: { type: string }) => {
 	}
 
 	return (
-		<>
-			<div className="text-[5rem] text-center font-bold mb-8">
-				<h1 className="bg-gradient-to-tr from-emerald-400 to-lime-700 text-transparent bg-clip-text">
-					MAFIN.
-				</h1>
-				<p className="text-xs text-slate-200 font-sans">
-					Your finance journaling made easy.
-				</p>
-			</div>
+		<div className="flex h-screen items-center justify-center overflow-hidden">
+			<div className="flex w-full h-screen">
+				<div className="md:w-1/2">
+					<div className="w-[24rem] items-center mx-auto my-auto mt-48">
+						<div className="text-[4rem] text-center font-bold mb-8">
+							<h1 className="text-black">MAFIN.</h1>
+							<p className="text-xs text-slate-200 font-sans">
+								Your finance journaling made easy.
+							</p>
+						</div>
 
-			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-					{type === "/sign-up" && (
-						<FormField
-							control={form.control}
-							name="name"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Name</FormLabel>
-									<FormControl>
-										<Input placeholder="name" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					)}
-					<FormField
-						control={form.control}
-						name="email"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Email</FormLabel>
-								<FormControl>
-									<Input placeholder="email" {...field} />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="password"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Password</FormLabel>
-								<FormControl>
-									<Input type="password" placeholder="password" {...field} />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					{type === "/sign-in" ? (
-						<div>
-							<Button type="submit" className="w-full" disabled={isLoading}>
-								Sign In
-							</Button>
-							<p className="text-center mt-4 text-xs">
-								Don&apos;t have an account? Sign up{" "}
-								<Link
-									href="/sign-up"
-									className="underline cursor-pointer font-bold">
-									here
-								</Link>
-							</p>
-						</div>
-					) : (
-						<div>
-							<Button type="submit" className="w-full" disabled={isLoading}>
-								Sign Up
-							</Button>
-							<p className="text-center mt-4 text-xs">
-								Already have an account? Sign in{" "}
-								<Link
-									href="/sign-in"
-									className="underline cursor-pointer font-bold">
-									here
-								</Link>
-							</p>
-						</div>
-					)}
-				</form>
-			</Form>
-		</>
+						<Form {...form}>
+							<form
+								onSubmit={form.handleSubmit(onSubmit)}
+								className="space-y-8">
+								{type === "/sign-up" && (
+									<FormField
+										control={form.control}
+										name="name"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Name</FormLabel>
+												<FormControl>
+													<Input placeholder="name" {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+								)}
+								<FormField
+									control={form.control}
+									name="email"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Email</FormLabel>
+											<FormControl>
+												<Input placeholder="email" {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="password"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Password</FormLabel>
+											<FormControl>
+												<Input
+													type="password"
+													placeholder="password"
+													{...field}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								{type === "/sign-in" ? (
+									<div>
+										<Button
+											type="submit"
+											className="w-full"
+											disabled={isLoading}>
+											Sign In
+										</Button>
+										<p className="text-center mt-4 text-xs">
+											Don&apos;t have an account? Sign up{" "}
+											<Link
+												href="/sign-up"
+												className="underline cursor-pointer font-bold">
+												here
+											</Link>
+										</p>
+									</div>
+								) : (
+									<div>
+										<Button
+											type="submit"
+											className="w-full"
+											disabled={isLoading}>
+											Sign Up
+										</Button>
+										<p className="text-center mt-4 text-xs">
+											Already have an account? Sign in{" "}
+											<Link
+												href="/sign-in"
+												className="underline cursor-pointer font-bold">
+												here
+											</Link>
+										</p>
+									</div>
+								)}
+							</form>
+						</Form>
+					</div>
+				</div>
+				<Image
+					src="/images/login.png"
+					alt="login image"
+					width={3000}
+					height={3000}
+					className="hidden w-1/2 object-cover md:block"
+				/>
+			</div>
+		</div>
 	);
 };
 
